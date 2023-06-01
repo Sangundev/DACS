@@ -238,7 +238,7 @@ namespace Food_Web.Controllers
                         Od_name = currentUserId,
                         Od_date = DateTime.Now,
                         Od_note = null,
-                        Od_status = null,
+                        Od_status = false,
                         Od_address = null,
                         idthanhtoan = 1
                         
@@ -360,7 +360,7 @@ namespace Food_Web.Controllers
                         Od_name = currentUserId,
                         Od_date = DateTime.Now,
                         Od_note = null,
-                        Od_status = null,
+                        Od_status = false,
                         Od_address = null,
                         idthanhtoan = 2
                        

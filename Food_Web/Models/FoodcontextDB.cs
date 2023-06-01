@@ -8,7 +8,7 @@ namespace Food_Web.Models
     public partial class FoodcontextDB : DbContext
     {
         public FoodcontextDB()
-            : base("name=FoodcontextDB17")
+            : base("name=FoodcontextDB18")
         {
         }
 

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Food_Web.Models.Order_detail>
+
+@{
+    ViewBag.Title = "Order Day";
+    Layout = "~/Views/Shared/_LayoutStore.cshtml";
+}
+
+<h2>Order Day</h2>
+
+<div>
+    @using (Html.BeginForm("Orderday", "Order_details", FormMethod.Get))
+    {
+        <div class="form-group">
+            @Html.Label("Select Date:")
+            @Html.TextBox("od_day", null, new { @class = "form-control datepicker", @placeholder = "Select date" })
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    }
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.Od_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Productname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tt_money)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Storeid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.Od_date)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.Od_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Productname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.num)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tt_money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Storeid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.Od_date)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Order.Od_id })
+            </td>
+        </tr>
+    }
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
+
+    <script>
+        flatpickr(".datepicker", {
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+    </script>
+}

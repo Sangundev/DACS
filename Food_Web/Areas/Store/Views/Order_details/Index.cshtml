@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Food_Web.Models.Order_detail>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStore.cshtml";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.Od_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Productname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tt_money)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Storeid)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.Od_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Productname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.num)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tt_money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Storeid)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Order.Od_id })
+            </td>
+
+
+            <td>
+                @if (item.Order.Od_status == false)
+                {
+                    <button class="btn btn-success btn-approve" data-id="@item.Order.idthanhtoan">Chưa giao</button>
+                }
+                else
+                {
+                    <button class="btn btn-danger btn-approve" data-id="@item.Order.idthanhtoan">Đã giao</button>
+                }
+            </td>
+
+        </tr>
+    }
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".btn-approve").on("click", function () {
+            var button = $(this);
+            var id = button.data("id");
+            var status = button.hasClass("btn-success");
+
+            $.ajax({
+                url: '@Url.Action("UpStatus", "Order_details")',
+                type: 'POST',
+                data: { id: id, status: status },
+                success: function (result) {
+                    if (result.success) {
+                        if (status) {
+                            button.removeClass('btn-success').addClass('btn-danger').text('Đã giao');
+                        } else {
+                            button.removeClass('btn-danger').addClass('btn-success').text('Chưa giao');
+                        }
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while updating the order status.');
+                }
+            });
+        });
+    });
+</script>
+

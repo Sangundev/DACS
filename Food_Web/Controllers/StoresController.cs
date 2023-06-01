@@ -75,31 +75,15 @@ namespace Food_Web.Controllers
                 return View("StoreProducts");
             }
 
-        //public ActionResult ShowComment(string storeId)
-        //{
-        //    storeId = getIdStore;
-        //    using (var db = new FoodcontextDB())
-        //    {
-        //        var comments = db.Comments.Where(c => c.Store_id == storeId).ToList();
-        //        return View(comments);
-        //    }
-        //}
-        public ActionResult ShowComment(string storeId, int? page)
+        public ActionResult ShowComment(string storeId)
         {
             storeId = getIdStore;
-
             using (var db = new FoodcontextDB())
             {
-                var comments = db.Comments.Where(c => c.Store_id == storeId).OrderBy(c => c.created).ToList();
-
-                int pageSize = 2; // Number of comments per page
-                int pageNumber = page ?? 1; // If no page is specified, default to page 1
-                var pagedComments = comments.ToPagedList(pageNumber, pageSize);
-
-                return View(pagedComments);
+                var comments = db.Comments.Where(c => c.Store_id == storeId).ToList();
+                return View(comments);
             }
         }
-
 
 
         public ActionResult HotProducts(string id)

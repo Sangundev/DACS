@@ -56,10 +56,11 @@
                         <nav class="header-menu">
                             <ul class="menu food-nav-menu">
                                 <li>@Html.ActionLink(Resources.MENU_HOME, "Index", "Product")</li>
-                                <li><a href="#about">@Resources.MENU_ABOUT</a></li>
+                                @*<li><a href="#about">@Resources.MENU_ABOUT</a></li>*@
                                 <li><a href="#menu">@Resources.MENU_MENU</a></li>
-                                <li><a href="#gallery">@Resources.MENU_GALLEY</a></li>
-                                <li><a href="#blog">@Resources.MENU_BLOG</a></li>
+                                <li>@Html.ActionLink("Lịch sử mua hàng ", "Index", "Order_detail")</li>
+                                @*<li><a href="#gallery">@Resources.MENU_GALLEY</a></li>
+                                <li><a href="#blog">@Resources.MENU_BLOG</a></li>*@
                                 <li><a href="#contact">@Resources.MENU_CONTACT</a></li>
                             </ul>
                         </nav>

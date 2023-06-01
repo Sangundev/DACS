@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Food_Web.Models.Order_detail>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Order_detail", FormMethod.Get))
+{
+    <div class="form-group">
+        @Html.Label("Filter By Order Status: ")
+        @Html.DropDownList("statusFilter", new List<SelectListItem>
+        {
+            new SelectListItem { Text = "All", Value = "" },
+            new SelectListItem { Text = "Delivered", Value = "true" },
+            new SelectListItem { Text = "Not Delivered", Value = "false" }
+        }, new { onchange = "this.form.submit();" })
+    </div>
+}
+
+@using (Html.BeginForm("tt", "Order_detail", FormMethod.Get))
+{
+    <div class="form-group">
+        @Html.Label("Filter By Payment Status: ")
+        @Html.DropDownList("paymentStatusFilter", new List<SelectListItem>
+        {
+            new SelectListItem { Text = "All", Value = "" },
+            new SelectListItem { Text = "Paid", Value = "2" },
+            new SelectListItem { Text = "Unpaid", Value = "1" }
+        }, new { onchange = "this.form.submit();" })
+    </div>
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Productname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tt_money)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.idthanhtoan)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.Od_status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (string.IsNullOrEmpty(Request.QueryString["statusFilter"]) ||
+            (item.Order.Od_status == bool.Parse(Request.QueryString["statusFilter"])))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Productname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.num)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tt_money)
+                </td>
+                <td>
+                    @if (item.Order.idthanhtoan == 2)
+                    {
+                        <span>Đã Thanh Toán</span>
+                    }
+                    else
+                    {
+                        <span>Chưa Thanh Toán</span>
+                    }
+                </td>
+                <td>
+                    @if (item.Order.Od_status == true)
+                    {
+                        <span>Delivered</span>
+                    }
+                    else
+                    {
+                        <span>Not Delivered</span>
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>

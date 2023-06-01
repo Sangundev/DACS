@@ -33,8 +33,7 @@ namespace Food_Web.Models
 
         public DateTime? Od_date { get; set; }
 
-        [StringLength(100)]
-        public string Od_status { get; set; }
+        public bool? Od_status { get; set; }
 
         public int? idthanhtoan { get; set; }
 
