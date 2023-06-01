@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Food_Web.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>User Name</th>
+            <th>Phone Number</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => member.Id)</td>
+                <td>@Html.DisplayFor(modelItem => member.Email)</td>
+                <td>@Html.DisplayFor(modelItem => member.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => member.PhoneNumber)</td>
+                <td id="status-@member.Id">@member.IsApproved ? "Active" : "Inactive"</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = member.Id })
+                    @Html.ActionLink("Delete", "Delete", new { id = member.Id })
+                    @if (member.IsApproved)
+                    {
+                        <button class="btn-approve" data-id="@member.Id" disabled>Approved</button>
+                    }
+                    else
+                    {
+                        <button class="btn-approve" data-id="@member.Id">Approve</button>
+                    }
+                </td>
+
+                <td>
+                    @if (member.IsApproved)
+                    {
+                        <button class="btn-approve" data-id="@member.Id" data-approved="true">Block</button>
+                    }
+                    else
+                    {
+                        <button class="btn-approve" data-id="@member.Id" data-approved="false">Approve</button>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".btn-approve").on("click", function () {
+            alert("An error occurred while approving the user.");
+            var button = $(this);
+            var id = button.data("id");
+            $.ajax({
+                url: "/Admin/Member/Approve",
+                type: "POST",
+                data: { id: id },
+                success: function () {
+                    $("#status-" + id).text("Active");
+                    button.attr("disabled", true);
+                },
+                error: function () {
+                    alert("An error occurred while approving the user.");
+                }
+            });
+        });
+    });
+
+        $(document).ready(function () {
+            $(".btn-approve").on("click", function () {
+                var button = $(this);
+                var id = button.data("id");
+                var isApproved = button.data("approved");
+
+                $.ajax({
+                    url: "/Admin/Member/Block",
+                    type: "POST",
+                    data: { id: id, isApproved: !isApproved },
+                    success: function () {
+                        var status = $("#status-" + id);
+                        if (!isApproved) {
+                            button.text("Block");
+                            button.data("approved", true);
+                            status.text("Active");
+                        } else {
+                            button.text("Approve");
+                            button.data("approved", false);
+                            status.text("Inactive");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while changing the user's approval status.");
+                    }
+                });
+            });
+    });
+
+</script>
+
+
+
+

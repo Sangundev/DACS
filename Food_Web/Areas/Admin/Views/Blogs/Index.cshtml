@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Food_Web.Models.Blog>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Bloglong)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Blogday)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Blogshort)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bloglong)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Blogday)
+        </td>
+        <td>
+            <img src="~/Content/images/blog/@item.image" , style="width:80px " />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Blogshort)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Blogid }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Blogid }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Blogid })
+        </td>
+    </tr>
+}
+
+</table>

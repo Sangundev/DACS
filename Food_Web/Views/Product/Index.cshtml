@@ -1,0 +1,610 @@
+﻿@model IEnumerable<Food_Web.Models.Product>
+@using System.Resources
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
+}
+
+
+@* HOME *@
+<section class="main-banner" id="home">
+    <div class="js-parallax-scene">
+        <div class="banner-shape-1 w-100" data-depth="0.30">
+            <img src="~/Content/images/berry.png" />
+        </div>
+        <div class="banner-shape-2 w-100" data-depth="0.25">
+            <img src="~/Content/images/leaf.png" />
+        </div>
+    </div>
+    <div class="sec-wp">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="banner-text">
+                        <h1 class="h1-title">
+                            @Resources.TITLE_WELCOME
+
+                        </h1>
+                        <p>
+                            This is Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam eius
+                            vel tempore consectetur nesciunt? Nam eius tenetur recusandae optio aperiam.
+                        </p>
+                        <div class="banner-btn mt-4">
+                            <a href="#menu" class="sec-btn">Check our Menu</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="banner-img-wp">
+                        <div class="banner-img"
+                             style="background-image: url('../../content/main-b.jpg');"></div>
+
+                    </div>
+                    <div class="banner-img-text mt-4 m-auto">
+                        <h5 class="h5-title">Sushi</h5>
+                        <p>this is Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="brands-sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="brand-title mb-5">
+                    <h5 class="h5-title">Trusted by 70+ companies</h5>
+                </div>
+                <div class="brands-row">
+                    <div class="brands-box">
+                        <img src="~/Content/images/brands/b1.png" alt="">
+                    </div>
+                    <div class="brands-box">
+                        <img src="~/Content/images/brands/b2.png" alt="">
+                    </div>
+                    <div class="brands-box">
+                        <img src="~/Content/images/brands/b3.png" alt="">
+                    </div>
+                    <div class="brands-box">
+                        <img src="~/Content/images/brands/b4.png" alt="">
+                    </div>
+                    <div class="brands-box">
+                        <img src="~/Content/images/brands/b5.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-sec section" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="sec-title text-center mb-5">
+                    <p class="sec-sub-title mb-3">About Us</p>
+                    <h2 class="h2-title">Discover our <span>restaurant story</span></h2>
+                    <div class="sec-title-shape mb-4">
+                        <img src="~/Content/images/title-shape.svg" alt="">
+                    </div>
+                    <p>
+                        This is Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe dolore at
+                        aspernatur eveniet temporibus placeat voluptatum quaerat accusamus possimus
+                        cupiditate, quidem impedit sed libero id perspiciatis esse earum repellat quam.
+                        Dolore modi temporibus quae possimus accusantium, cum corrupti sed deserunt iusto at
+                        sapiente nihil sint iste similique soluta dolor! Quod.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="about-video">
+                    <div class="about-video-img" style="background-image: url('../../content/images/about.jpg');"></div>
+
+                    <div class="play-btn-wp">
+                        <a href="~/Content/images/video.mp4" data-fancybox="video" class="play-btn">
+                            <i class="uil uil-play"></i>
+                        </a>
+                        <span>Watch The Recipe</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* SAN PHAM *@
+<section style="background-image: url(assets/images/menu-bg.png);"
+         class="our-menu section bg-light repeat-img" id="menu">
+    <div class="sec-wp">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sec-title text-center mb-5">
+                        <p class="sec-sub-title mb-3">our menu</p>
+                        <h2 class="h2-title">wake up early, <span>eat fresh & healthy</span></h2>
+                        <div class="sec-title-shape mb-4">
+                            <img src="assets/images/title-shape.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            @{Html.RenderAction("GetCategorys", "Product"); }
+
+
+        </div>
+</section>
+
+
+@*shsa*@
+<section class="two-col-sec section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5">
+                <div class="sec-img mt-5">
+                    <img src="~/Content/images/pizza.png" alt="">
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="sec-text">
+                    <h2 class="xxl-title">Chicken Pepperoni</h2>
+                    <p>
+                        This is Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet dolores
+                        eligendi earum eveniet soluta officiis asperiores repellat, eum praesentium nihil
+                        totam. Non ipsa expedita repellat atque mollitia praesentium assumenda quo
+                        distinctio excepturi nobis tenetur, cum ab vitae fugiat hic aspernatur? Quos
+                        laboriosam, repudiandae exercitationem atque a excepturi vel. Voluptas, ipsa.
+                    </p>
+                    <p>
+                        This is Lorem ipsum dolor sit amet consectetur adipisicing elit. At fugit laborum
+                        voluptas magnam sed ad illum? Minus officiis quod deserunt.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="two-col-sec section pt-0">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-1 order-2">
+                <div class="sec-text">
+                    <h2 class="xxl-title">Chicken Pepperoni</h2>
+                    <p>
+                        This is Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet dolores
+                        eligendi earum eveniet soluta officiis asperiores repellat, eum praesentium nihil
+                        totam. Non ipsa expedita repellat atque mollitia praesentium assumenda quo
+                        distinctio excepturi nobis tenetur, cum ab vitae fugiat hic aspernatur? Quos
+                        laboriosam, repudiandae exercitationem atque a excepturi vel. Voluptas, ipsa.
+                    </p>
+                    <p>
+                        This is Lorem ipsum dolor sit amet consectetur adipisicing elit. At fugit laborum
+                        voluptas magnam sed ad illum? Minus officiis quod deserunt.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-2 order-1">
+                <div class="sec-img">
+                    <img src="~/Content/images/sushi.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*KHAI MAC*@
+
+<section class="book-table section bg-light">
+    <div class="book-table-shape">
+        <img src="~/Content/Layout/assets/images/table-leaves-shape.png" alt="">
+    </div>
+
+    <div class="book-table-shape book-table-shape2">
+        <img src="~/Content/Layout/assets/images/table-leaves-shape.png" alt="">
+    </div>
+
+    <div class="sec-wp">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sec-title text-center mb-5">
+                        <p class="sec-sub-title mb-3">Book Table</p>
+                        <h2 class="h2-title">Opening Table</h2>
+                        <div class="sec-title-shape mb-4">
+                            <img src="~/Content/Layout/assets/images/title-shape.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-table-info">
+                <div class="row align-items-center">
+                    <div class="col-lg-4">
+                        <div class="table-title text-center">
+                            <h3>Monday to Thrusday</h3>
+                            <p>9:00 am - 22:00 pm</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="call-now text-center">
+                            <i class="uil uil-phone"></i>
+                            <a href="tel:+91-8866998866">+91 - 8866998866</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="table-title text-center">
+                            <h3>Friday to Sunday</h3>
+                            <p>11::00 am to 20:00 pm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="gallery">
+                <div class="col-lg-10 m-auto">
+                    <div class="book-table-img-slider" id="icon">
+                        <div class="swiper-wrapper">
+                            <a href="~/Content/images/bt1.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt1.jpg'); "></a>
+                            <a href="~/Content/images/bt2.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt2.jpg');"></a>
+                            <a href="~/Content/images/bt3.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt3.jpg');"></a>
+                            <a href="~/Content/images/bt4.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt4.jpg');"></a>
+                            <a href="~/Content/images/bt1.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt1.jpg');"></a>
+                            <a href="~/Content/images/bt2.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt2.jpg');"></a>
+                            <a href="~/Content/images/bt3.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt3.jpg');"></a>
+                            <a href="~/Content/images/bt4.jpg" data-fancybox="table-slider"
+                               class="book-table-img back-img swiper-slide"
+                               style="background-image: url('../../content/images/bt4.jpg');"></a>
+                        </div>
+
+                        <div class="swiper-button-wp">
+                            <div class="swiper-button-prev swiper-button">
+                                <i class="uil uil-angle-left"></i>
+                            </div>
+                            <div class="swiper-button-next swiper-button">
+                                <i class="uil uil-angle-right"></i>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+
+@*<section class="our-team section">
+
+        <div class="row team-slider">
+            <div class="swiper-wrapper">
+                @{Html.RenderAction("Index", "chef"); }
+            </div>
+            <div class="swiper-button-wp">
+                <div class="swiper-button-prev swiper-button">
+                    <i class="uil uil-angle-left"></i>
+                </div>
+                <div class="swiper-button-next swiper-button">
+                    <i class="uil uil-angle-right"></i>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>*@
+
+@*<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="sec-title text-center mb-5">
+                <p class="sec-sub-title mb-3">Our Team</p>
+                <h2 class="h2-title">Meet our Chefs</h2>
+                <div class="sec-title-shape mb-4">
+                    <img src="~/Content/assets/images/title-shape.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Action("Index", "chef")
+</div>*@
+@* binh luan *@
+<section class="testimonials section bg-light">
+    @*<div class="sec-wp">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sec-title text-center mb-5">
+                        <p class="sec-sub-title mb-3">What they say</p>
+                        <h2 class="h2-title">What our customers <span>say about us</span></h2>
+                        <div class="sec-title-shape mb-4">
+                            <img src="~/Content/assets/images/title-shape.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.Action("Index", "FeedBack")
+        </div>
+    </div>*@
+    @*<div class="">
+        <a href="@Url.Action("Create", "FeedBack", new { username = User.Identity.Name })" class="btn btn-primary">Thêm bình luận</a>
+    </div>*@
+
+
+    <div class="">
+        @Html.Action("Index", "Stores")
+    </div>
+
+</section>
+@* DANH GIA *@
+<section class="faq-sec section-repeat-img" style="background-image: url('../../content/images/faq-bg.png');">
+    <div class="sec-wp">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sec-title text-center mb-5">
+                        <p class="sec-sub-title mb-3">faqs</p>
+                        <h2 class="h2-title">Frequently <span>asked questions</span></h2>
+                        <div class="sec-title-shape mb-4">
+                            <img src="~/Content/assets/images/title-shape.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-row">
+                <div class="faq-box">
+                    <h4 class="h4-title">What are the login hours?</h4>
+                    <p>
+                        It is Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus ipsum
+                        vitae fugit laboriosam dolor distinctio.
+                    </p>
+                </div>
+                <div class="faq-box">
+                    <h4 class="h4-title">What do i get my refund?</h4>
+                    <p>
+                        It is Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus ipsum
+                        vitae fugit laboriosam dolor distinctio. Lorem ipsum dolor sit amet.
+                    </p>
+                </div>
+                <div class="faq-box">
+                    <h4 class="h4-title">How long it will take food to arrive?</h4>
+                    <p>
+                        It is Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus ipsum
+                        vitae fugit laboriosam dolor distinctio.
+                    </p>
+                </div>
+                <div class="faq-box">
+                    <h4 class="h4-title">Does your restaurant has both veg and non veg?</h4>
+                    <p>
+                        It is Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus ipsum
+                        vitae fugit laboriosam dolor distinctio. Lorem ipsum, dolor sit amet consectetur
+                        adipisicing elit. Voluptates, distinctio?
+                    </p>
+                </div>
+                <div class="faq-box">
+                    <h4 class="h4-title">What is cost of food delivery?</h4>
+                    <p>
+                        It is Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus ipsum
+                        vitae fugit laboriosam dolor distinctio. Lorem ipsum dolor sit amet consectetur,
+                        adipisicing elit. Nam officiis ducimus, cum enim repudiandae animi.
+                    </p>
+                </div>
+                <div class="faq-box">
+                    <h4 class="h4-title">Who is eligible for pro membership?</h4>
+                    <p>
+                        It is Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus ipsum
+                        vitae fugit laboriosam dolor distinctio.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+@* blog *@
+<div class="bg-pattern bg-light repeat-img"
+     style="background-image: url(assets/images/blog-pattern-bg.png);">
+    <section class="blog-sec section" id="blog">
+        <div class="sec-wp">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="sec-title text-center mb-5">
+                            <p class="sec-sub-title mb-3">Our blog</p>
+                            <h2 class="h2-title">Latest Publications</span></h2>
+                            <div class="sec-title-shape mb-4">
+                                <img src="assets/images/title-shape.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Action("Index", "Blog")
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-sec section pt-0">
+        <div class="sec-wp">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 m-auto">
+                        <div class="newsletter-box text-center back-img white-text"
+                             style="background-image: url(assets/images/news.jpg);">
+                            <div class="bg-overlay dark-overlay"></div>
+                            <div class="sec-wp">
+                                <div class="newsletter-box-text">
+                                    <h2 class="h2-title">Subscribe our newsletter</h2>
+                                    <p>
+                                        This is Lorem ipsum dolor sit amet consectetur adipisicing elit ad
+                                        veritatis.
+                                    </p>
+                                </div>
+                                <form action="#" class="newsletter-form">
+                                    <input type="email" class="form-input"
+                                           placeholder="Enter your Email Here" required>
+                                    <button type="submit" class="sec-btn primary-btn">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+@section scripts{
+    <script>
+        $(document).ready(function () { });
+        $(".menu-tab-wp li").click(function () {
+            var categoryID = $(this).attr("data-filter");
+            $.ajax({
+                url: '/Product/GetProductByCategory',
+                type: "GET",
+                data: { "categoryid": categoryID },
+                success: function (result) {
+                    $('.menu-list-row').html(result);
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+        $(".menu-tab-wp li").click(function () {
+            var categoryID = $(this).attr("data-filter");
+            $.ajax({
+                url: '/Product/GetProductByCategory',
+                type: "GET",
+                data: { "categoryid": categoryID },
+                success: function (result) {
+                    $('.menu-list-row').html(result);
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+        var i = 0;
+        $(document).on('click', '.dish-add-btn', function () {
+            var ProductID = $(this).data("id");
+            //alert(ProductID);
+            $.ajax({
+                url: '/ShoppingCart/AddToCart',
+                type: 'POST',
+                data: { "id": ProductID },
+                success: function (result) {
+                    console.log('main' + i++);
+                    swal({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success",
+                    });
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+        $('.add-to-favorites').click(function () {
+           /* alert('them thanh cong');*/
+            var productId = $(this).closest('.dish-box-wp').find('.dish-add-btn').data('id');
+            $.ajax({
+                url: '/Heart/AddToHeart',
+                method: 'POST',
+                data: { id: productId },
+                success: function (response) {
+                    // xử lý phản hồi từ máy chủ, chẳng hạn như cập nhật số lượng mục ưa thích
+                    $('#favorite-count').text(response.favoriteCount);
+                    swal({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success",
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // xử lý lỗi, nếu có
+                    console.log('Lỗi khi thêm vào mục ưa thích:', errorThrown);
+                }
+            });
+        });
+
+
+        //$(document).on('click', '#test', function () {
+        //    alert('hehheeh')
+           
+        //});
+        //$(document).on('click', '.pagination-container a', function (e) {
+        //    alert('hehheeh');
+        //    e.preventDefault();
+        //    var url = $(this).attr('href');
+        //    $.ajax({
+        //        url: url,
+        //        type: 'GET',
+        //        dataType: 'html',
+        //        success: function (result) {
+        //            // Thay thế nội dung trang hiện tại bằng nội dung trang mới
+        //            $('html').html(result);
+        //        },
+        //        error: function (xhr, status, error) {
+        //            console.log(error);
+        //        }
+        //    });
+        //});
+    </script>
+}
+@*<script>
+        $(document).ready(function () {
+            // Add a click event listener to the button element
+
+            $("#menu-dish button").click(function () {
+
+
+                var ProductID = $(this).attr("data-id");
+                alert(ProductID);
+                $.ajax({
+                    url: '/ShoppingCart/AddToCart',
+                    type: "GET",
+                    data: { "id": ProductID },
+                    success: function (result) {
+                        /*$('.menu-list-row').html(result);*/
+                        alert(result);
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            });
+        });
+    </script>*@
+

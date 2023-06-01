@@ -1,0 +1,76 @@
+﻿
+@model IEnumerable<Food_Web.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Index";
+    Layout = /*"~/Views/Shared/_Layout.cshtml";*/ null;
+}
+
+
+<section class="our-team section">
+
+    <div class="row team-slider">
+        <div class="swiper-wrapper">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 swiper-slide">
+                        <div class="team-box text-center">
+                            @*<div @Html.ActionLink(item.UserName, "StoreProducts", "Stores", new { id = item.Id }, null) style="background-image: url('../../content/images/chef/@item.Image');"
+             class="team-img back-img" >
+        </div>*@
+                            <a href="@Url.Action("StoreProducts", "Stores", new { id = item.Id })">
+                                <div style="background-image: url('@Url.Content("~/content/images/chef/" + item.Image)');" class="team-img back-img"></div>
+                            </a>
+
+                            @*  *@
+
+                            @*<a href="@Url.Action("Details", "Store", new { id = item.Id })">*@
+                            <div>
+                                @*<td>@Html.ActionLink(item.UserName, "StoreProducts", "Stores", new { id = item.Id }, null)</td>*@
+                                @*<input type="hidden" value=@product.Userid />*@
+                            </div>
+                            <div class="social-icon">
+                                <ul>
+                                    <li>
+                                        <a href="#" )><i class="uil uil-facebook-f"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="uil uil-instagram"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="uil uil-youtube"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            @*<h3 class="h3-title">@item.UserName</h3>*@
+                            <td>@Html.ActionLink(item.UserName, "StoreProducts", "Stores", new { id = item.Id }, null)</td>
+                            <input type="hidden" name="storeId" value="@ViewBag.userId" />
+
+                            <div>
+                                     <td>  @item.OpeningTime - @item.ClosingTime </td>
+
+                            </div>
+                    </div>
+        </div>
+            }
+        </div>
+        <div class="swiper-button-wp">
+            <div class="swiper-button-prev swiper-button">
+                <i class="uil uil-angle-left"></i>
+            </div>
+            <div class="swiper-button-next swiper-button">
+                <i class="uil uil-angle-right"></i>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+
+
+

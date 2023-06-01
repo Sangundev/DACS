@@ -1,0 +1,67 @@
+﻿@model Food_Web.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Categoryname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Categoryname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Productname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Productname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.image)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.discription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.discription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sortdiscription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sortdiscription)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Productid }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

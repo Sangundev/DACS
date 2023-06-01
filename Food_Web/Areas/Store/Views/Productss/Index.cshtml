@@ -1,0 +1,208 @@
+﻿@model IEnumerable<Food_Web.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStore.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.Categoryname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.chef.image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Productname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.discription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sortdiscription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Userid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Categoryname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.chef.image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Productname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.discription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sortdiscription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Userid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @if (item.status)
+                {
+                    <button class="btn btn-success" data-id="@item.Productid" onclick="updateProductStatus(@item.Productid, false)">Còn</button>
+                }
+                else
+                {
+                    <button class="btn btn-danger" data-id="@item.Productid" onclick="updateProductStatus(@item.Productid, true)">Hết</button>
+                }
+            </td>
+
+
+
+            <td>w
+                @Html.ActionLink("Edit", "Edit", new { id = item.Productid }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Productid }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Productid })
+            </td>
+        </tr>
+    }
+    <p>Total Products: @ViewBag.TotalStock</p>
+
+    <p>Total Products Sold: @ViewBag.TotalProductsSold</p>
+
+    <p>Total Money: @ViewBag.TotalMoney</p>
+
+
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+@*function updateProductStatus(productId, status) {
+    $.ajax({
+        type: 'POST',
+        url: '@Url.Action("UpdateStatus", "Productss")',
+        data: {id: productId, status: status},
+        success: function(result) {
+            if (result.success) {
+                // Cập nhật lại trạng thái của sản phẩm
+                var button = $('#product-' + productId + '-status');
+                if (status) {
+                    button.removeClass('btn-success').addClass('btn-danger').text('Hết');
+                } else {
+                    button.removeClass('btn-danger').addClass('btn-success').text('Còn');
+                }
+            } else {
+                alert('Lỗi cập nhật trạng thái sản phẩm');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Lỗi cập nhật trạng thái sản phẩm');
+        }
+    });
+      }*@
+
+     /* function updateProductStatus(productId, status) {*/
+        @*$.ajax({
+            url: '@Url.Action("UpdateStatus", "Productss")',
+            type: 'POST',
+            data: { id: productId, status: status },
+            success: function (result) {
+                if (result.success) {
+                    // Cập nhật trạng thái nút
+                    var button = $('#status-' + productId);
+                    if (status) {
+                        button.removeClass('btn-success').addClass('btn-danger').text('Hết');
+                    } else {
+                        button.removeClass('btn-danger').addClass('btn-success').text('Còn');
+                    }
+                } else {
+                    alert('Cập nhật trạng thái sản phẩm không thành công.');
+                }
+            },
+            error: function () {
+                alert('Có lỗi xảy ra trong quá trình cập nhật trạng thái sản phẩm.');
+            }
+        });
+    }*@
+    @*function updateProductStatus(id, status) {
+  $.ajax({
+    url: '@Url.Action("UpdateStatus", "Productss")',
+    type: 'POST',
+    data: { id: id, status: status },
+    success: function(result) {
+      if (result.success) {
+        // Cập nhật trạng thái của sản phẩm và thay đổi nút hiển thị trạng thái của sản phẩm
+        var button = $('button[data-id="' + id + '"]');
+        if (status) {
+          button.removeClass('btn-success').addClass('btn-danger');
+          button.html('Hết');
+          button.attr('onclick', 'updateProductStatus(' + id + ', false)');
+        } else {
+          button.removeClass('btn-danger').addClass('btn-success');
+          button.html('Còn');
+          button.attr('onclick', 'updateProductStatus(' + id + ', true)');
+        }
+      } else {
+        alert('Có lỗi xảy ra khi cập nhật trạng thái sản phẩm!');
+      }
+    },
+    error: function(xhr, status, error) {
+      alert('Có lỗi xảy ra khi cập nhật trạng thái sản phẩm!');
+    }
+  });
+}*@
+
+    function updateProductStatus(productId, status) {
+  $.ajax({
+    url: '@Url.Action("UpdateStatus", "Productss")',
+    type: 'POST',
+    data: { id: productId, status: status },
+    success: function(result) {
+      if (result.success) {
+        // Update the button text and color
+        var button = $('button[data-id="' + productId + '"]');
+        if (status) {
+          button.removeClass('btn-danger').addClass('btn-success').text('Còn');
+        } else {
+          button.removeClass('btn-success').addClass('btn-danger').text('Hết');
+        }
+      } else {
+        alert('Có lỗi xảy ra khi cập nhật trạng thái sản phẩm.');
+      }
+    },
+    error: function() {
+      alert('Có lỗi xảy ra khi gửi yêu cầu cập nhật trạng thái sản phẩm.');
+    }
+  });
+}
+
+</script>
+
+
+

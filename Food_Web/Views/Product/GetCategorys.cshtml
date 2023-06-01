@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Food_Web.Models.Category>
+
+<div class="menu-tab-wp">
+    <div class="row">
+        <div class="col-lg-12 m-auto">
+            <div class="menu-tab text-center">
+                <ul class="filters">
+                    <div class="filter-active">
+
+                    </div>
+                    @foreach (var item in Model)
+                    {
+                        <li class="filter" data-filter="@item.Categoryid">
+                            <img src="" alt="">
+                            @item.Categoryname
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="menu-list-row">
+
+    @{ Html.RenderAction("GetProductByCategory", "Product", new { categoryid = 1 }); }
+
+</div>
+
+@*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+<script>
+    $(document).ready(function () {
+
+        //$(".menu-tab-wp li").click(function () {
+        //    var categoryID = $(this).attr("data-filter");
+        //    $.ajax({
+        //        url: '/Product/GetProductByCategory',
+        //        type: "GET",
+        //        data: { "categoryid": categoryID },
+        //        success: function (result) {
+        //            $('.menu-list-row').html(result);
+        //        },
+        //        error: function (err) {
+        //            alert(err.statusText);
+        //        }
+        //    });
+        //});
+    });
+</script>
+
+
+
+

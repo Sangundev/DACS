@@ -1,0 +1,85 @@
+﻿
+@model IEnumerable<Food_Web.Models.Product>
+
+<div class="row g-xxl-5 bydefault_show" id="menu-dish">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-sm-6 dish-box-wp breakfast" data-cat="@item.Categoryid">
+            <div class="dish-box text-center">
+                <div class="dist-img">
+                    <img src="~/Content/products/@item.image" alt="" style="width: 250px">
+                </div>
+                <div class="dish-rating">
+                    5
+                    <i class="uil uil-star"></i>
+                </div>
+                <div class="dish-title">
+                    <h3 class="h3-title">@item.Productname</h3>
+                    <p>120 calories</p>
+                </div>
+                <div class="dish-info">
+                    <ul>
+                        <li>
+                            <p>Type</p>
+                            <b>Non Veg</b>
+                        </li>
+                        <li>
+                            <p>Persons</p>
+                            <b>2</b>
+                        </li>
+                    </ul>
+                </div>
+                <div class="dist-bottom-row">
+                    <ul>
+                        <li>
+                            <b>@item.price</b>
+                        </li>
+                        <li>
+                            @*<button class="dish-add-btn">
+                                 <i class="uil uil-plus"></i>
+                                </button>*@
+                            <button class="dish-add-btn" data-id="@item.Productid">+GH</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Add a click event listener to the button element
+
+        $("#menu-dish button").click(function () {
+
+
+            var ProductID = $(this).attr("data-id");
+            /*alert(ProductID);*/
+            $.ajax({
+                url: '/ShoppingCart/AddToCart',
+                type: "GET",
+                data: { "id": ProductID },
+                success: function (result) {
+                    /*$('.menu-list-row').html(result);*/
+                    console.log('tim kiem');
+                    alert(result);
+                },
+                error: function (err) {
+                    /*alert(err.statusText);*/
+                }
+            });
+        });
+
+
+    });
+</script>
+
+
+

@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Shop Homepage - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="~/Content/assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes
+        Bootstrap)-->
+    <link href="~/Content/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder"> Shop </h1>
+                <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section-->
+
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                @foreach (var product in Model)
+                {
+
+
+
+                    <div class="col mb-5">
+                        <div class="card h-100 @if (!product.status) { @Html.Raw("bg-light disabled")} @* else { @Html.Raw("bg-white")} *@">
+                            @if (product.DiscountPercent > 0)
+                            {
+                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale @product.DiscountPercent%</div>
+                                <!-- Product image-->
+                                <img class="card-img-top" src="~/Content/products/@product.image" style="width:140px" @*src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."*@ />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">@product.Productname</h5>
+                                        <!-- Product price-->
+                                        @*$@product.DiscountedPrice*@
+                                        <div class="price-container">
+                                            <span class="discounted-price">$@product.DiscountedPrice</span>
+                                            <span class="original-price">$@product.price</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                            else if (product.DiscountPercent == null)
+                            {
+
+                                <img class="card-img-top" src="~/Content/products/@product.image" style="width:140px" @*src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."*@ />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">@product.Productname</h5>
+                                        <!-- Product price-->
+                                        $@product.price
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                            }
+                            @if (product.status)
+                            {
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-dark mt-auto" data-id="@product.Productid">Add to cart</a>
+                                        <button class="add-to-favorites">
+                                            <i class="fa-regular fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-dark mt-auto disabled" data-id="@product.Productid">Add to cart</a>
+                                        <button class="add-to-favorites">
+                                            <i class="fa-regular fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <h1>san pham dang giảm gia </h1>
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    @Html.Action("Sale1", "Stores"))
+                </div>
+            </div>
+        </section>
+        <h1>hot</h1>
+        @Html.Action("HotProducts", "Stores")
+        <h1>lựa chọn khác </h1>
+        @Html.Action("Index", "Stores")
+        @*<h1>binh luan </h1>
+        <form method="post" action="/Stores/id">
+            <input type="text" value="@ViewBag.userId" id="userId" name="userId">
+            <input type="text" placeholder="fghjaksd" />
+            <button type="submit">Binhf luaanj</button>
+        </form>*@
+
+
+    <form method="post" action="/Stores/Create">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="content">Comment</label>
+            <textarea id="content" name="content" class="form-control" placeholder="Enter your comment"></textarea>
+        </div>
+        @*<div class="form-group">
+            <label for="Rating">Rating</label>
+            <input type="text" id="Rating" name="Rating" class="form-control" />
+        </div>*@
+        <div class="form-group">
+            <label for="rating">Rating</label>
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5"></label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4"></label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3"></label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2"></label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1"></label>
+            </div>
+        </div>
+        <div class="form-group" style="display: none;">
+            <label for="storeId">Store ID</label>
+            <input type="text" id="storeId" name="storeId" class="form-control" value="@ViewBag.userId" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
+    </form>
+
+        @Html.Action("ShowComment", "Stores")
+
+    </section>
+        <!-- Footer-->
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="~/Content/js/scripts.js"></script>
+</body>
+</html>
+<style>
+    .price-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .discounted-price {
+        color: red;
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .original-price {
+        color: #999;
+        font-size: 1em;
+        text-decoration: line-through;
+    }
+
+    .price {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+
+    .rating {
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
+
+            .rating label:before {
+                content: "\2605";
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 20px;
+                line-height: 20px;
+                color: #ddd;
+            }
+
+            .rating label:hover:before,
+            .rating label:hover ~ label:before,
+            .rating input:checked ~ label:before {
+                color: #ffba00;
+            }
+</style>
+ 
+<script>
+    var i = 0;
+    $(document).on('click', '.btn', function () {
+        var ProductID = $(this).data("id");
+        alert(ProductID);
+        $.ajax({
+            url: '/ShoppingCart/AddToCart',
+            type: 'POST',
+            data: { "id": ProductID },
+            success: function (result) {
+                console.log('main' + i++);
+                swal({
+                    title: "Good job!",
+                    text: "You clicked the button!",
+                    icon: "success",
+                });
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    });
+
+   
+</script>

@@ -1,0 +1,81 @@
+﻿@model PagedList.IPagedList<Food_Web.Models.Comment>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "ShowComment";
+    Layout = null;
+}
+
+<h2>ShowComment</h2>
+
+<div id="comments-container">
+    @foreach (var item in Model)
+    {
+        <div class="comment">
+            <div class="comment-header">
+                <div class="comment-author">@item.user_id</div>
+                <div class="comment-date">@item.created</div>
+            </div>
+            <div class="comment-content">@item.content</div>
+        </div>
+    }
+</div>
+
+<div class="pagination-container">
+    @Html.PagedListPager(Model, page => Url.Action("ShowComment", new { page }))
+</div>
+
+<style>
+    #comments-container {
+        margin-top: 20px;
+    }
+
+    .comment {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .comment-author {
+        font-weight: bold;
+    }
+
+    .comment-date {
+        color: #888;
+    }
+
+    .comment-content {
+        margin-bottom: 10px;
+    }
+
+    .pagination-container {
+        margin-top: 20px;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+        .pagination-container a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            margin: 5px;
+            text-decoration: none;
+            color: #333;
+        }
+</style>

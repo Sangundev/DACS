@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Food_Web.Models.Product>
+
+<div class="row g-xxl-5 bydefault_show" id="menu-dish">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-sm-6 dish-box-wp breakfast" data-cat="@item.Categoryid">
+            <div class="dish-box text-center">
+                <div class="dist-img">
+                    <img src="~/Content/products/@item.image" alt="" style="width: 300px">
+                </div>
+                <div class="dish-rating">
+                    5
+                    <i class="uil uil-star"></i>
+                </div>
+                <div class="dish-title">
+                    <h3 class="h3-title">@item.Productname</h3>
+                    <p>120 calories</p>
+                </div>
+                <div class="dish-info">
+                    <ul>
+                        <li>
+                            <p>Type</p>
+                            <b>Non Veg</b>
+                        </li>
+                        <li>
+                            <p>Persons</p>
+                            <b>2</b>
+                        </li>
+                    </ul>
+                </div>
+                <div class="dist-bottom-row">
+                    <ul>
+                        <li>
+                            <b>@item.price</b>
+                        </li>
+                        <li>
+                            <button class="dish-add-btn" data-id="@item.Productid">
+                                <i class="uil uil-plus"></i>
+                            </button>
+                            @*<button class="btn btn-success" data-id="@item.Productid">Thêm vào giỏ hàng</button>*@
+                        </li>
+                        <li>
+                            @*<button data-id1="@item.Productid">
+                                    <i class="fa-solid fa-heart"></i>
+                                </button>*@
+                            <button class="add-to-favorites">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+@*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+<script>
+    $(document).ready(function () {
+        // Add a click event listener to the button element
+    });
+
+    //$(".menu-tab-wp li").click(function () {
+    //    var categoryID = $(this).attr("data-filter");
+    //    $.ajax({
+    //        url: '/Product/GetProductByCategory',
+    //        type: "GET",
+    //        data: { "categoryid": categoryID },
+    //        success: function (result) {
+    //            $('.menu-list-row').html(result);
+    //        },
+    //        error: function (err) {
+    //            alert(err.statusText);
+    //        }
+    //    });
+    //});
+
+    //var i = 0;
+    //$(document).on('click', '.dish-add-btn', function () {
+    //    var ProductID = $(this).data("id");
+    //    alert(ProductID);
+    //    $.ajax({
+    //        url: '/ShoppingCart/AddToCart',
+    //        type: 'POST',
+    //        data: { "id": ProductID },
+    //        success: function (result) {
+    //            console.log('main' + i++);
+    //            //alert(result);
+    //            swal({
+    //                title: "Good job!",
+    //                text: "You clicked the button!",
+    //                icon: "success",
+    //            });
+    //        },
+    //        error: function (err) {
+    //            alert(err.statusText);
+    //        }
+    //    });
+    //});
+
+    $('.add-to-favorites').click(function () {
+       /* alert('them thanh cong');*/
+        var productId = $(this).closest('.dish-box-wp').find('.dish-add-btn').data('id');
+        $.ajax({
+            url: '/Heart/AddToHeart',
+            method: 'POST',
+            data: { id: productId },
+            success: function (response) {
+                // xử lý phản hồi từ máy chủ, chẳng hạn như cập nhật số lượng mục ưa thích
+                $('#favorite-count').text(response.favoriteCount);
+                swal({
+                    title: "Good job!",
+                    text: "You clicked the button!",
+                    icon: "success",
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // xử lý lỗi, nếu có
+                console.log('Lỗi khi thêm vào mục ưa thích:', errorThrown);
+            }
+        });
+    });
+</script>
+
+
+

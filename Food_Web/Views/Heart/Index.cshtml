@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Food_Web.Models.Heartitem>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (var item in Model)
+{
+    <div class="col-lg-4 col-sm-6 dish-box-wp breakfast" data-cat="1" style="display: inline-block;">
+        <div class="dish-box text-center">
+            <div class="dist-img">
+                <img src="/Content/products/@item.Image" alt="" style="width: 300px">
+            </div>
+            <div class="dish-rating">
+                5
+                <i class="uil uil-star"></i>
+            </div>
+            <div class="dish-title">
+                <h3 class="h3-title">@item.ProductName</h3>
+                <p>120 calories</p>
+            </div>
+            <div class="dish-info">
+                <ul>
+                    <li>
+                        <p>Type</p>
+                        <b>Non Veg</b>
+                    </li>
+                    <li>
+                        <p>Persons</p>
+                        <b>2</b>
+                    </li>
+                </ul>
+            </div>
+            <div class="dist-bottom-row">
+                <ul>
+                    <li>
+                        <b>@item.Price</b>
+                    </li>
+                    <li>
+                       
+
+                        <button class="dish-add-btn" data-id="@item.ID">+GH</button>
+
+                    </li>
+               
+
+                    <li>
+
+                        <button class="delete-item" data-id="@item.ID">Xóa</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+<script>
+    var i = 0;
+    $(document).on('click', '.dish-add-btn', function () {
+        var ProductID = $(this).data("id");
+        alert($(this).data("id"));
+      /*  alert(ProductID);*/
+        $.ajax({
+            url: '/ShoppingCart/AddToCart',
+            type: 'POST',
+            data: { "id": ProductID },
+            success: function (result) {
+                console.log('main' + i++);
+                  alert(ProductID);
+                //swal({
+                //    title: "Good job!",
+                //    text: "You clicked the button!",
+                //    icon: "success",
+                //});
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    });
+
+
+   $(document).ready(function () {
+        $('.delete-item').on('click', function () {
+            var itemId = $(this).data('id');
+            $.ajax({
+                url: '@Url.Action("Delete", "Heart")/' + itemId,
+                type: 'POST',
+                success: function () {
+                    location.reload();
+                    swal({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success",
+                    });
+                }
+            });
+        });
+    });
+</script>
