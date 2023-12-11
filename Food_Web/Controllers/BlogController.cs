@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Food_Web.Models;
 
-namespace Food_Web.Controllers
+namespace Food_Web.Models
 {
     public class BlogController : Controller
     {

@@ -9,6 +9,10 @@ using System.Web;
 using System.Web.Mvc;
 using Food_Web.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
+using System.Web.Configuration;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Food_Web.Areas.Store.Controllers
 {
@@ -16,17 +20,36 @@ namespace Food_Web.Areas.Store.Controllers
     {
         private FoodcontextDB db = new FoodcontextDB();
 
-        // GET: Store/Discounts
         public async Task<ActionResult> Index()
         {
             // Get the id of the currently logged in store
             var storeId = User.Identity.GetUserId();
+            DateTime now = DateTime.Now; // Lấy thời gian thực hiện tại
 
-            // Get the discounts that belong to the logged in store
-            var discounts = await db.Discounts.Where(d => d.StoreId == storeId).ToListAsync();
+            // Get the discounts that belong to the logged-in store
+            var discounts = await db.Discounts
+                .Where(p => p.StoreId == storeId)
+                .ToListAsync();
+
+            // Update the Status property based on the current date
+            foreach (var discount in discounts)
+            {
+                if (discount.StartDate <= now && now <= discount.EndDate || discount.SoLuong > 0)
+                {
+                    discount.Status = true;
+                }
+                else if (discount.StartDate <= now && now <= discount.EndDate || discount.SoLuong <= 0)
+                {
+                    discount.Status = false;
+                }
+            }
+
+            // Save changes to the database
+            await db.SaveChangesAsync();
 
             return View(discounts);
         }
+
 
         // GET: Store/Discounts/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -49,45 +72,23 @@ namespace Food_Web.Areas.Store.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "DiscountPercent,EndDate")] Discount discount)
-        {
-            if (ModelState.IsValid)
-            {
-                discount.Id = db.Discounts.Max(d => d.Id) + 1;
-                // Find the store that belongs to the user
-                discount.StoreId = User.Identity.GetUserId();
-
-                // Set the start date to the current date and time
-                discount.StartDate = DateTime.Now;
-
-
-                discount.Code = Guid.NewGuid().ToString().Substring(0, 8);
-
-                // Add the discount to the database
-                db.Discounts.Add(discount);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            return View(discount);
-        }
-
-        
-
-
-
-
-        // POST: Store/Discounts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Create([Bind(Include = "Id,Code,StoreId,DiscountPercent,StartDate,EndDate")] Discount discount)
+        //public async Task<ActionResult> Create([Bind(Include = "DiscountPercent,EndDate,SoLuong")] Discount discount)
         //{
         //    if (ModelState.IsValid)
         //    {
+        //        discount.Id = db.Discounts.Max(d => d.Id) + 1;
+        //        // Find the store that belongs to the user
+        //        discount.StoreId = User.Identity.GetUserId();
+
+        //        // Set the start date to the current date and time
+        //        discount.StartDate = DateTime.Now;
+
+
+        //        discount.Code = Guid.NewGuid().ToString().Substring(0, 8);
+
+        //        // Add the discount to the database
         //        db.Discounts.Add(discount);
         //        await db.SaveChangesAsync();
         //        return RedirectToAction("Index");
@@ -95,10 +96,30 @@ namespace Food_Web.Areas.Store.Controllers
 
         //    return View(discount);
         //}
-        // POST: Store/Discounts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "DiscountPercent,EndDate,SoLuong")] Discount discount)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            if (ModelState.IsValid)
+            {
+                discount.Id = db.Discounts.Max(d => d.Id) + 1;
+                discount.StoreId = User.Identity.GetUserId();
+                discount.StartDate = DateTime.Now;
+                discount.Code = Guid.NewGuid().ToString().Substring(0, 8);
 
+                db.Discounts.Add(discount);
+                await db.SaveChangesAsync();
+
+                // Notify users about the successful creation of the discount
+                var discountMessage = "New discount available!"; // Customize your message
+                hubContext.Clients.All.SendDiscountNotification(discount.StoreId, discountMessage);
+
+                return RedirectToAction("Index");
+            }
+
+            return View(discount);
+        }
 
 
         // GET: Store/Discounts/Edit/5
@@ -121,7 +142,7 @@ namespace Food_Web.Areas.Store.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Code,StoreId,DiscountPercent,StartDate,EndDate")] Discount discount)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Code,StoreId,DiscountPercent,StartDate,SoLuong,EndDate")] Discount discount)
         {
             if (ModelState.IsValid)
             {
@@ -132,30 +153,17 @@ namespace Food_Web.Areas.Store.Controllers
             return View(discount);
         }
 
-        // GET: Store/Discounts/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        [HttpPost]
+        public JsonResult RemoveDiscout(int id)
         {
-            if (id == null)
+            var dc = db.Discounts.SingleOrDefault(x => x.Id == id);
+            if (dc != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                db.Discounts.Remove(dc);
+                db.SaveChanges();
+                return Json(new { success = true });
             }
-            Discount discount = await db.Discounts.FindAsync(id);
-            if (discount == null)
-            {
-                return HttpNotFound();
-            }
-            return View(discount);
-        }
-
-        // POST: Store/Discounts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Discount discount = await db.Discounts.FindAsync(id);
-            db.Discounts.Remove(discount);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Json(new { success = true });
         }
 
         protected override void Dispose(bool disposing)

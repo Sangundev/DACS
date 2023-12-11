@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Net;
+using System.Web;
+using Microsoft.AspNet.Identity;
+using static Food_Web.Models.ManageController;
 
 namespace Food_Web.Areas.Admin.Controllers
 {
@@ -31,9 +34,34 @@ namespace Food_Web.Areas.Admin.Controllers
                 .Where(u => u.Roles.Any(r => r.RoleId == role.Id))
                 .ToListAsync();
             return View(members);
-
         }
-        // GET: Member/Create
+
+        public async Task<ActionResult> User()
+        {
+            var role = await _roleManager.FindByNameAsync("Member");
+            var members = await _userManager.Users
+                .Where(u => u.Roles.Any(r => r.RoleId == role.Id))
+                .ToListAsync();
+            return View(members);
+        }
+
+
+        public async Task<ActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(user);
+        }
+
         public ActionResult Create()
         {
             var model = new RegisterViewModel();
@@ -146,6 +174,6 @@ namespace Food_Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-
+       
     }
 }

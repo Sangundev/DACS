@@ -28,17 +28,20 @@ namespace Food_Web.Models
         {
             IsApproved = false;
         }
-        public string Image { get; set; }
-        public string OpeningTime { get; set; }
-        public string ClosingTime { get; set; }
-       
+        public string image { get; set; }
 
+        public string status { get; set; }
+        public TimeSpan? Opentime { get; set; }
+        public TimeSpan? Closetime { get; set; }
+         public string Adress { get; set; }
+        public string Fullname { get; set; }
+        
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("FoodcontextDB19", throwIfV1Schema: false)
         {
         }
 
@@ -51,10 +54,10 @@ namespace Food_Web.Models
 
         public DbSet<Category> Categories { get; set; }
 
-        //public DbSet<chef> chefs { get; set; }
         public string ConfirmPassword { get; set; }
 
-        public System.Data.Entity.DbSet<Food_Web.Models.chef> chefs { get; set; }
+
+        //public System.Data.Entity.DbSet<Food_Web.Models.chef> chefs { get; set; }
 
         //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 

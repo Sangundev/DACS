@@ -1,11 +1,12 @@
 ﻿using Food_Web.Models;
 using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace Food_Web.Controllers
+namespace Food_Web.Models
 {
     public class HeartController : Controller
     {
@@ -16,14 +17,25 @@ namespace Food_Web.Controllers
             db = new FoodcontextDB();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var userId = User.Identity.GetUserId();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            var userId = User.Identity.GetUserId();
             var heartItems = db.Heartitems.Where(h => h.Userid == userId).ToList();
 
-            return View(heartItems);
+            int pageSize = 6; // Number of items to display per page
+            int pageNumber = page ?? 1; // Current page number, default is 1
+
+            IPagedList<Heartitem> pagedHeartItems = heartItems.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedHeartItems);
         }
+
+
 
         [HttpPost]
         public string AddToHeart(int id)

@@ -23,6 +23,10 @@ namespace Food_Web.Models
 
         public int? Rating { get; set; }
 
-        public DateTime? created { get; set; }
+        public DateTime created { get; set; }
+
+        public string img { get; set; }
+
+        public string clip { get; set; }
     }
 }

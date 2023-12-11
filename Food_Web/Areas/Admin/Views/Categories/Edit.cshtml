@@ -5,42 +5,66 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Edit</h2>
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Categories", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Category</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Categoryid)
+    <div class="card shadow mb-4">
+        <div class="card-header py-3" style="display:flex; align-items:center; justify-content:space-between">
+            <h6 class="m-0 font-weight-bold text-primary" style="user-select:none"><a href="~/Admin/Categories/Index">← Quay lại</a></h6>
+            <button type="submit" class="btn btn-primary" href="~/Admin/Categories/Edit">Sửa</button>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Categoryname, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Categoryname, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Categoryname, "", new { @class = "text-danger" })
-            </div>
         </div>
+        <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <!-- Search -->
+            <div class="row">
+                <div class="col-md-4 box-upload">
+                    <label>
+                        <img src="~/Content/products/@Model.image" style="height: 320px; padding: 5px 0; border-radius: 15px;" id="preview" />
+                        <div class="col-md-10" style=" display: none;">
+                            <input type="file" name="Content" required calss="form-control" id="images" accept=".png, .jpg, .jpeg" required onchange="showImage(this, document.getElementById('preview'))" />
+                        </div>
+                    </label>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.image, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.image, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="col-md-8">
+                    <div class="form-group" style="display: flex; justify-content:center">
+                        <div class="col-sm-4">
+                            <label>Tên Sản Phẩm: </label>
+                            @Html.TextBoxFor(m => m.Categoryname, new { @class = "form-control form-control-sm", style = "width: 250px; padding: 7px 5px;" })
+                            @Html.ValidationMessageFor(m => m.Categoryname, "", new { @class = "text-danger", style = "display: block; margin: 5px auto;" })
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 }
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    function showImage(upload, preview) {
+        if (upload.files && upload.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(preview).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(upload.files[0]);
+        }
+    }
+</script>
+}
+<style>
+    img#preview {
+        margin: 0px 24px 17px 174px
+    }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    label.btnChoose {
+        margin: -60px 255px;
+    }
+
+    .btnChoose input {
+        display: none;
+    }
+</style>

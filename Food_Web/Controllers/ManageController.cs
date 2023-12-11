@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Food_Web.Models;
 
-namespace Food_Web.Controllers
+namespace Food_Web.Models
 {
     [Authorize]
     public class ManageController : Controller

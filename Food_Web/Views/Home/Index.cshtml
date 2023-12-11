@@ -1,31 +1,129 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<Food_Web.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="products-slider owl-carousel owl-loaded owl-drag" data-item="4">
+    @foreach (var item in Model)
+    {
+        <div class="item">
+            <div class="image-container">
+                <a class="item-img-wrapper-link" href="@Url.Action("Detail", "Home", new { id = item.Productid })">
+                    <img class="img-fluid" src="~/Content/products/@item.image" alt="Product">
+                </a>
+                <div class="item-action-behaviors">
+                    @*<a class="item-quick-look" data-toggle="modal" href="@Url.Action("Details", "Product", new { id = item.Productid })">
+                            Quick Look
+                        </a>*@
+
+
+                    @*<a class="item-mail" href="javascript:void(0)">Mail</a>*@
+                    <a class="item-addwishlist" href="javascript:void(0)" data-id="@item.Productid">Add to Wishlist</a>
+                    <a class="item-addCart" href="javascript:void(0)" data-id="@item.Productid">Add to Cart</a>
+                </div>
+            </div>
+            <div class="item-content">
+                <div class="what-product-is">
+                    <ul class="bread-crumb">
+                        <li class="has-separator">
+                            <a href="@Url.Action("Index", "Product")">home</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Product")">@item.Category.Categoryname</a>
+                        </li>
+                    </ul>
+
+                    <h6 class="item-title">
+                        <a href="single-product.html">@item.Productname</a>
+                    </h6>
+                    <div class="item-stars">
+                        <div class='star' title="0 out of 5 - based on 0 Reviews">
+                            <span style='width:0'></span>
+                        </div>
+                        <span>(0)</span>
+                    </div>
+                </div>
+                <div class="price-template">
+                    @if (item.DiscountPercent > 0)
+                    {
+                        <div class="item-new-price">
+                            @item.DiscountedPrice
+                        </div>
+                        <div class="item-old-price">
+                            @item.price
+                        </div>
+                        <div class="tag new" style="background: #ffd507 ">
+                            <span>-@item.DiscountPercent %</span>
+                        </div>
+
+                    }
+                    else if (item.DiscountPercent == null)
+                    {
+                        if (item.is_hot == true)
+                        {
+                            <div class="item-new-price">
+                                @item.price
+                            </div>
+                            <div class="tag new" style="background: #FF4500">
+                                <span>Hot</span>
+                            </div>
+
+                        }
+                        <div class="item-new-price">
+                            @item.price
+                        </div>
+                        <div class="tag new" >
+                            <span>new</span>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="tag new">
+                <span>NEW</span>
+            </div>
+        </div>
+    }
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+        });
+        $(".menu-tab-wp li").click(function () {
+            var categoryID = $(this).attr("data-filter");
+            $.ajax({
+                url: '/Product/GetProductByCategory',
+                type: "GET",
+                data: { "categoryid": categoryID },
+                success: function (result) {
+                    $('.menu-list-row').html(result);
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+        $(".menu-tab-wp li").click(function () {
+            var categoryID = $(this).attr("data-filter");
+            $.ajax({
+                url: '/Product/GetProductByCategory',
+                type: "GET",
+                data: { "categoryid": categoryID },
+                success: function (result) {
+                    $('.menu-list-row').html(result);
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+
+
+    </script>
+}

@@ -14,73 +14,89 @@ using Food_Web.Models;
 using System.Configuration;
 using System.Net.Mail;
 using System.Net.Mime;
+using SendGrid.Helpers.Mail;
+using SendGrid;
+using System.Diagnostics;
 using System.Net;
-using Newtonsoft.Json.Linq;
-
 
 namespace Food_Web
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        //public Task SendAsync(IdentityMessage message)
+        //{
+        // Plug in your email service here to send an email.
+        //return Task.FromResult(0);
+        //return Task.Factory.StartNew(() => sendMail(message));
+
+        //}
+        public async Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            //return Task.FromResult(0);
-            return Task.Factory.StartNew(() => SendMail(message));
+            await configSendGridasync(message);
         }
 
-        //  void sendMail(IdentityMessage message)
-        //  {
-        //      #region formatter
-        //      string text = string.Format("Please click on this link to {0}: {1}", message.Subject, message.Body);
-        //      string html = "Please confirm your account by clicking this link: <a href=\"" + message.Body + "\">link</a><br/>";
+        private async Task configSendGridasync(IdentityMessage message)
+        {
+            var myMessage = new SendGridMessage();
+            myMessage.AddTo(message.Destination);
+            myMessage.From = new EmailAddress(
+                                "nguyenngocsang1682@gmail.com", "(f!VE.x6zim3Dws)");
+            myMessage.Subject = message.Subject;
+            myMessage.PlainTextContent = message.Body;
+            myMessage.HtmlContent = message.Body;
 
-        //      html += HttpUtility.HtmlEncode(@"Or click on the copy the following link on the browser:" + message.Body);
-        //      #endregion
-        ////       < add key = "Email" value = "nxxn736@gmail.com" />
+            var apiKey = ConfigurationManager.AppSettings["sendGridApiKey"];
 
-        ////< add key = "Password" value = "nxxnnguyen736" />
-        //      MailMessage msg = new MailMessage();
-        //      //msg.From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString());
-        //      msg.From = new MailAddress("nxxn736@gmail.com");
-        //      msg.To.Add(new MailAddress(message.Destination));
-        //      msg.Subject = message.Subject;
-        //      msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
-        //      msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
+            // Create a SendGrid client with the API key.
+            var client = new SendGridClient(apiKey);
 
-        //      SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32(465));
-        //      //System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["Email"].ToString(), ConfigurationManager.AppSettings["Password"].ToString());
-        //      System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("nxxn736@gmail.com", "nxxnnguyen736");
-        //      smtpClient.Credentials = credentials;
-        //      smtpClient.EnableSsl = true;
-        //      smtpClient.Send(msg);
-        //  }
-
-
-        void SendMail(IdentityMessage message)
+            try
             {
-                #region formatter
-                string text = string.Format("Please click on this link to {0}: {1}", message.Subject, message.Body);
-                string html = "Please confirm your account by clicking this link: <a href=\"" + message.Body + "\">link</a><br/>";
+                // Send the email using SendGrid client.
+                var response = await client.SendEmailAsync(myMessage);
 
-                html += HttpUtility.HtmlEncode(@"Or click on the copy the following link on the browser:" + message.Body);
-                #endregion
-
-                MailMessage msg = new MailMessage();
-                msg.From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString());
-                msg.To.Add(new MailAddress(message.Destination));
-                msg.Subject = message.Subject;
-                msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
-                msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
-
-                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-                System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["Email"].ToString(), ConfigurationManager.AppSettings["Password"].ToString());
-                smtpClient.Credentials = credentials;
-                smtpClient.EnableSsl = true;
-                smtpClient.Send(msg);
+                if (response.StatusCode != HttpStatusCode.OK &&
+                    response.StatusCode != HttpStatusCode.Accepted)
+                {
+                    // Handle unsuccessful email sending.
+                    Trace.TraceError($"Failed to send email. Status Code: {response.StatusCode}");
+                }
             }
+            catch (Exception ex)
+            {
+                // Handle exception if any error occurs during email sending.
+                Trace.TraceError($"Error sending email: {ex.Message}");
+            }
+        }
 
-}
+        //void sendMail(IdentityMessage message)
+        //{
+        //    #region formatter
+        //    string text = string.Format("Please click on this link to {0}: {1}", message.Subject, message.Body);
+        //    string html = "Please confirm your account by clicking this link: <a href=\"" + message.Body + "\">link</a><br/>";
+
+        //    html += HttpUtility.HtmlEncode(@"Or click on the copy the following link on the browser:" + message.Body);
+        //    #endregion
+
+        //    MailMessage msg = new MailMessage();
+        //    msg.From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString());
+        //    msg.From = new MailAddress("nxxn736@gmail.com");
+        //    msg.To.Add(new MailAddress(message.Destination));
+        //    msg.Subject = message.Subject;
+        //    msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
+        //    msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
+
+        //    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32(465));
+        //    System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["Email"].ToString(), ConfigurationManager.AppSettings["Password"].ToString());
+        //    //System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("nxxn736@gmail.com", "nxxnnguyen736");
+        //    smtpClient.Credentials = credentials;
+        //    smtpClient.EnableSsl = true;
+        //    smtpClient.Send(msg);
+        //}
+
+
+
+    }
 
 
 

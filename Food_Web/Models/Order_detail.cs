@@ -30,5 +30,10 @@ namespace Food_Web.Models
         public virtual Order Order { get; set; }
 
         public virtual Product Product { get; set; }
+
+        [StringLength(50)]
+        public string VoucherCode { get; set; }
+
+        public double? Totalinvoucher { get; set; }
     }
 }

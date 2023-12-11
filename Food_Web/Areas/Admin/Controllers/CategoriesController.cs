@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Food_Web.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Food_Web.Areas.Admin.Controllers
 {
@@ -44,18 +47,29 @@ namespace Food_Web.Areas.Admin.Controllers
         // POST: Admin/Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Categoryid,Categoryname,image")] Category category)
+        public ActionResult Create(Category newcategory, HttpPostedFileBase Content)
         {
+
+            var context = new FoodcontextDB();
+
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
-                db.SaveChanges();
+
+                newcategory = context.Categories.Add(newcategory);
+
+                if (Content != null && Content.ContentLength > 0)
+                {
+                    var typeFile = Path.GetExtension(Content.FileName);
+                    newcategory.image = newcategory.Categoryid + typeFile;
+                    var filePath = Path.Combine(Server.MapPath("~/Content/products"), newcategory.image);
+                    Content.SaveAs(filePath);
+
+                }
+
+                context.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(category);
+            return View("Create", newcategory);
         }
 
         // GET: Admin/Categories/Edit/5
@@ -73,21 +87,55 @@ namespace Food_Web.Areas.Admin.Controllers
             return View(category);
         }
 
-        // POST: Admin/Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Categoryid,Categoryname,image")] Category category)
+        public async Task<ActionResult> Edit([Bind(Include = "Categoryid, Categoryname")] Category newcategory, HttpPostedFileBase Content)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    var find = await db.Categories.FindAsync(newcategory.Categoryid);
+                    if (find == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    if (Content != null && Content.ContentLength > 0)
+                    {
+                        string fileName = "";
+                        int index = Content.FileName.IndexOf('.');
+                        fileName = "ImageProduct" + newcategory.Categoryid.ToString() + "." + Content.FileName.Substring(index + 1);
+                        string path = Path.Combine(Server.MapPath("~/Content/products"), fileName);
+                        Content.SaveAs(path);
+                        newcategory.image = fileName;
+                    }
+                    else
+                    {
+                        newcategory.image = find.image;
+                    }
+
+                    db.Entry(find).CurrentValues.SetValues(newcategory);
+                    await db.SaveChangesAsync();
+
+                    ViewBag.Categoryid = new SelectList(db.Categories, "Categoryid", "Categoryname", newcategory.Categoryid);
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    // Handle any exceptions that occur during the saving process
+                   
+                    return View(newcategory);
+                }
             }
-            return View(category);
+            else
+            {
+                
+                return View(newcategory);
+            }
         }
+
 
         // GET: Admin/Categories/Delete/5
         public ActionResult Delete(int? id)

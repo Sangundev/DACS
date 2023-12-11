@@ -13,7 +13,7 @@
     <title>SB Admin 2 - Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/loadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
 
@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Admin</div>
             </a>
 
             <!-- Divider -->
@@ -43,9 +43,9 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="@Url.Action("Index", "Homess")">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
+                    <span>Trang Chủ</span>
                 </a>
             </li>
 
@@ -62,18 +62,20 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>QuanLy</span>
+                    <span>Xem </span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        @*<a class="collapse-item" href="~/Areas/Admin/Views/Products/Index.cshtml">San Pham</a>
-        <a class="collapse-item" href="~/Areas/Admin/Views/Categories/Index.cshtml">Loai San Pham</a>*@
-                        <a class="collapse-item" @Html.ActionLink("Sản Phẩm", "Index", "Products")</a>
-                        <a class="collapse-item" @Html.ActionLink("Loại Sản Phẩm", "Index", "Categories")</a>
-                        <a class="collapse-item" @Html.ActionLink("Đầu Bếp", "Index", "chefs")</a>
-                        <a class="collapse-item" @Html.ActionLink("TK cua hang", "Index", "Member")</a>
 
+                        <a class="collapse-item" @Html.ActionLink("Sản Phẩm", "Index", "Products")</a>
+
+                        <a class="collapse-item" @Html.ActionLink("Loại Sản Phẩm", "Index", "Categories")</a>
+
+                        <a class="collapse-item" @Html.ActionLink("Sản Phẩm Đang Giảm Giá ", "Sale", "SPgiam")</a>
+
+                        <a class="collapse-item" @Html.ActionLink("Sản Phẩm Tiêu Biểu ", "hot", "SPtot")</a>
+
+                        <a class="collapse-item" @Html.ActionLink("Voucher ", "Index", "Voucher")</a>
                     </div>
                 </div>
             </li>
@@ -89,10 +91,14 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" @Html.ActionLink("Bình Luận", "Index", "FeedBacks")</a>
-                        <a class="collapse-item" @Html.ActionLink("Bài Viết", "Index", "Blogs")</a>
-                        <a class="collapse-item" @Html.ActionLink("Đặt Hàng", "Index", "Orders")</a>
-                        <a class="collapse-item" @Html.ActionLink("Đặt Hàng", "List", "User")</a>
+                        <a class="collapse-item" @Html.ActionLink("Tài khoản Cửa Hàng ", "Index", "Member")</a>
+                        <a class="collapse-item" @Html.ActionLink("Tài khoản Người Dùng ", "User", "Member")</a>
+
+                        <a class="collapse-item" @Html.ActionLink("Đánh Giá về cửa hàng", "Index", "Comments")</a>
+
+
+                        <a class="collapse-item" @Html.ActionLink("Đơn Đặt Hàng ", "Index", "Order_detailss")</a>
+                        @*<a class="collapse-item" @Html.ActionLink("Đặt Hàng", "List", "User")</a>*@
                     </div>
                 </div>
             </li>
@@ -117,9 +123,8 @@
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Login Screens:</h6>
-                            <a class="collapse-item"  @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</a>
-                            <a class="collapse-item" href="register.html">Register</a>
                             <a class="collapse-item" @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</a>
+                            <a class="collapse-item" @Html.ActionLink("Thông Tin Tài Khoản", "Index", "Acoounts")</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Other Pages:</h6>
 
@@ -129,23 +134,21 @@
                     </div>
                 </form>
             </li>
-
-            <!-- Nav Item - Charts -->
-            @*<li class="nav-item">
-                <a class="nav-link" href="charts.html">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCharts"
+                   aria-expanded="true" aria-controls="collapseCharts">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span>
+                    <span>Bài Viết</span>
                 </a>
-            </li>*@
+                <div id="collapseCharts" class="collapse" aria-labelledby="headingCharts" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
 
-            <!-- Nav Item - Tables -->
-            @*<li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span>
-                </a>
-            </li>*@
+                        <a class="collapse-item" href="@Url.Action("Index", "Blogs")">Xem Bài Viết</a>
+                        <a class="collapse-item" href="@Url.Action("Create", "Blogs")">Thêm Bài Viết</a>
 
+                    </div>
+                </div>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -374,31 +377,35 @@
                     </ul>
 
                 </nav>
-                @RenderBody();
+                <div class="container-fluid">
+
+
+
+
+                    @RenderBody()
+
+
+
+
+
+
+
+                </div>
+
+
+                <!-- End of Footer -->
 
             </div>
-            <!-- End of Main Content -->
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            <!-- End of Content Wrapper -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Page Wrapper -->
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
-    </div>
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
+        <!-- Logout Modal-->
 
         <form action="/Account/LogOff" method="post" id="logoutForm">
             @Html.AntiForgeryToken()
@@ -423,25 +430,22 @@
             </div>
         </form>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="~/Content/loadmin/vendor/jquery/jquery.min.js"></script>
-    @*<script src="vendor/jquery/jquery.min.js"></script>*@
-    @*<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>*@
-    <script src="~/Content/loadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript-->
-    @*<script src="vendor/jquery-easing/jquery.easing.min.js"></script>*@
-    <script src="~/Content/loadmin/vendor/jquery-easing/jquery.easing.js"></script>
-    <!-- Custom scripts for all pages-->
-    @*<script src="js/sb-admin-2.min.js"></script>*@
-    <script src="~/Content/loadmin/js/sb-admin-2.min.js"></script>
-    <!-- Page level plugins -->
-    @*<script src="vendor/chart.js/Chart.min.js"></script>*@
-    <script src="~/Content/loadmin/vendor/chart.js/Chart.min.js"></script>
-    <!-- Page level custom scripts -->
-    @*<script src="js/demo/chart-area-demo.js"></script>
-        <script src="js/demo/chart-pie-demo.js"></script>*@
-    <script src="~/Content/loadmin/js/demo/chart-area-demo.js"></script>
-    <script src="~/Content/loadmin/js/demo/chart-pie-demo.js"></script>
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+        <script src="~/Content/Store/jquery.min.js"></script>
+        <script src="~/Content/Store/bootstrap.bundle.min.js"></script>
+        <script src="~/Content/Store/js/sb-admin-2.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/lib/easing/easing.min.js"></script>
+        <script src="~/lib/waypoints/waypoints.min.js"></script>
+        <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="~/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="~/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="~/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Template Javascript -->
+        <script src="~/js/main.js"></script>
+        @RenderSection("scripts", required: false)
 </body>
 
 </html>

@@ -115,6 +115,87 @@ namespace Food_Web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flash Deals.
+        /// </summary>
+        public static string RS__Deals {
+            get {
+                return ResourceManager.GetString("RS_ Deals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusive Deals.
+        /// </summary>
+        public static string RS__Exclusive {
+            get {
+                return ResourceManager.GetString("RS_ Exclusive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pages.
+        /// </summary>
+        public static string RS__Pages {
+            get {
+                return ResourceManager.GetString("RS_ Pages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Categories.
+        /// </summary>
+        public static string RS_Categories {
+            get {
+                return ResourceManager.GetString("RS_Categories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Products available.
+        /// </summary>
+        public static string RS_HC {
+            get {
+                return ResourceManager.GetString("RS_HC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Arrivals.
+        /// </summary>
+        public static string RS_New {
+            get {
+                return ResourceManager.GetString("RS_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Super Sale.
+        /// </summary>
+        public static string RS_Sale {
+            get {
+                return ResourceManager.GetString("RS_Sale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search everything.
+        /// </summary>
+        public static string RS_seach {
+            get {
+                return ResourceManager.GetString("RS_seach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Store.
+        /// </summary>
+        public static string RS_Store {
+            get {
+                return ResourceManager.GetString("RS_Store", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome To Our ENGLISH Restaurant.
         /// </summary>
         public static string TITLE_WELCOME {

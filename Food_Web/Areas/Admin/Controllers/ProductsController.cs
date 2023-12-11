@@ -49,35 +49,17 @@ namespace Food_Web.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+     
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public ActionResult Create(Product newproduct, HttpPostedFileBase Content)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    db.Products.Add(product);
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
-
-            //ViewBag.Categoryid = new SelectList(db.Categories, "Categoryid", "Categoryname", product.Categoryid);
-            //return View(product);
+           
             var context = new FoodcontextDB();
 
             if (ModelState.IsValid)
             {
-                //id phai tinh tu db ra 
-                //try
-                //{
-                //    newproduct.Id = context.Products.Max(p => p..) + 1;
-                //}
-                //catch
-                //{
-                //    newbook.Id = 1;
-                //}
+               
                 newproduct = context.Products.Add(newproduct);
 
                 if (Content != null && Content.ContentLength > 0)
@@ -95,7 +77,7 @@ namespace Food_Web.Areas.Admin.Controllers
             return View("Create", newproduct);
         }
 
-        // GET: Admin/Products/Edit/5
+        
         public ActionResult Edit(int? id)
         {
             if (id == null)

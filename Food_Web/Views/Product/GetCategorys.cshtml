@@ -1,31 +1,67 @@
 ﻿@model IEnumerable<Food_Web.Models.Category>
 
-<div class="menu-tab-wp">
-    <div class="row">
-        <div class="col-lg-12 m-auto">
-            <div class="menu-tab text-center">
-                <ul class="filters">
-                    <div class="filter-active">
+@*<div class="menu-tab-wp">
+        <div class="row">
+            <div class="col-lg-12 m-auto">
+                <div class="menu-tab text-center">
+                    <ul class="filters">
+                        <div class="filter-active">
+                        </div>
+                        @foreach (var item in Model)
+                        {
+                            <li class="filter" data-filter="@item.Categoryid">
+                                <img src="" alt="">
+                                @item.Categoryname
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>*@
 
-                    </div>
+
+
+<div class="col-lg-3">
+    <div class="v-menu">
+        <span class="v-title">
+            <i class="ion ion-md-menu"></i>
+            @Resources.RS_Categories
+            <i class="fas fa-angle-down"></i>
+        </span>
+        <nav>
+            <div class="v-wrapper">
+                <ul class="v-list animated fadeIn">
                     @foreach (var item in Model)
                     {
-                        <li class="filter" data-filter="@item.Categoryid">
-                            <img src="" alt="">
-                            @item.Categoryname
+                        <li class="js-backdrop">
+                            <a href="@Url.Action("GetProductByCategory", "Product", new { categoryid = item.Categoryid })">
+                                <i class="ion ion-md-restaurant"></i> <!-- Biểu tượng thức ăn chung -->
+                                @item.Categoryname
+                                @*<i class="ion ion-ios-arrow-forward"></i>*@
+                            </a>
                         </li>
                     }
                 </ul>
             </div>
-        </div>
+        </nav>
     </div>
 </div>
 
-<div class="menu-list-row">
 
-    @{ Html.RenderAction("GetProductByCategory", "Product", new { categoryid = 1 }); }
 
-</div>
+@*<nav>*@
+
+@*</nav>*@
+
+@*@{ Html.RenderAction("GetProductByCategory", "Product", new { categoryid = 1 }); }*@
+
+@*</div>*@
+@*<div class="menu-list-row">
+
+        @{ Html.RenderAction("GetProductByCategory", "Product", new { categoryid = 1 }); }
+
+    </div>*@
 
 @*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
 <script>

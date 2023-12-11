@@ -18,7 +18,11 @@ namespace Food_Web.Models
         [StringLength(128)]
         public string StoreId { get; set; }
 
+        public int? SoLuong { get; set; }
+
         public double DiscountPercent { get; set; }
+
+        public bool Status { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime StartDate { get; set; }

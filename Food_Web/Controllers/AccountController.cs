@@ -10,14 +10,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Food_Web.Models;
 using Microsoft.Ajax.Utilities;
-using System.Net;
 using System.Net.Mail;
-using System.Configuration;
+using System.Net;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 
-
-
-
-namespace Food_Web.Controllers
+namespace Food_Web.Models
 {
     [Authorize]
     public class AccountController : Controller
@@ -62,7 +59,68 @@ namespace Food_Web.Controllers
             }
         }
 
+         //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+
+        //    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+        //    switch (result)
+        //    {
+        //        case SignInStatus.Success:
+        //            {
+        //                var user = await UserManager.FindByEmailAsync(model.Email);
+        //                var roles = await UserManager.GetRolesAsync(user.Id);
+
+        //                if (roles.Contains("Admin"))
+        //                {
+        //                    return RedirectToAction("Index", "Products", new { area = "Admin" });
+        //                }
+        //                else if (roles.Contains("User"))
+        //                {
+
+        //                    //return RedirectToAction("Index", "Productss", new { area = "Store" });
+        //                    if (!user.IsApproved)
+        //                    {
+        //                        ViewBag.Message = "Tài khoản Đang đợi Admin Duyệt / hoặc bị blog.";
+        //                        return View("Message");
+        //                    }
+        //                    else
+        //                    {
+        //                        return RedirectToAction("Index", "Productss", new { area = "Store" });
+        //                    }
+        //                }
+        //                else if (roles.Contains("Member"))
+        //                {
+        //                    return RedirectToAction("Index", "Product");
+        //                }
+        //                else
+        //                {
+        //                    return RedirectToLocal(returnUrl);
+        //                }
+
+
+        //            }
+        //        case SignInStatus.LockedOut:
+        //            return View("Lockout");
+        //        case SignInStatus.RequiresVerification:
+        //            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+        //        case SignInStatus.Failure:
+        //        default:
+        //            ModelState.AddModelError("", "Invalid login attempt.");
+        //            return View(model);
+        //    }
+        //}
+
+
         //
+        // GET: /Account/VerifyCode
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -70,55 +128,72 @@ namespace Food_Web.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl,FormCollection fc)
         {
+            var response = Request["g-recaptcha-response"];
+            string secretKety = "6LfM7_8oAAAAAFgE91nVCyTSpL-yN-9bUPt_q0fF";
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var user = await UserManager.FindByNameAsync(model.EmailOrUsername)
+             ?? await UserManager.FindByEmailAsync(model.EmailOrUsername);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
+
+            string storedPasswordHash = user.PasswordHash;
+            SignInStatus result;
+
+            if (model.Password == storedPasswordHash)
+            {
+                return RedirectToAction("Index", "Product");
+            }
+            else
+            {
+                 result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            }
+
 
             switch (result)
             {
                 case SignInStatus.Success:
+                    var roles = await UserManager.GetRolesAsync(user.Id);
+
+                    if (roles.Contains("Admin"))
                     {
-                        var user = await UserManager.FindByEmailAsync(model.Email);
-                        var roles = await UserManager.GetRolesAsync(user.Id);
-
-                        if (roles.Contains("Admin"))
+                        return RedirectToAction("Index", "Products", new { area = "Admin" });
+                    }
+                    else if (roles.Contains("User"))
+                    {
+                        if (!user.IsApproved)
                         {
-                            return RedirectToAction("Index", "Products", new { area = "Admin" });
-                        }
-                        else if (roles.Contains("User"))
-                        {
-
-                            //return RedirectToAction("Index", "Productss", new { area = "Store" });
-                            if (!user.IsApproved)
-                            {
-                                ViewBag.Message = "Your account has not been approved yet. Please contact the admin for further information.";
-                                return View("Message");
-                            }
-                            else
-                            {
-                                return RedirectToAction("Index", "Productss", new { area = "Store" });
-                            }
-                        }
-                        else if (roles.Contains("Member"))
-                        {
-                            return RedirectToAction("Index", "Product");
+                            ViewBag.Message = "Tài khoản đang đợi Admin Duyệt hoặc bị block.";
+                            return View("Message");
                         }
                         else
                         {
-                            return RedirectToLocal(returnUrl);
+                            return RedirectToAction("Index", "Productss", new { area = "Store" });
                         }
-                        //return RedirectToLocal(returnUrl);
-                        ////return Content("hi");
-
                     }
+                    else if (roles.Contains("Member"))
+                    {
+                        return RedirectToAction("Index", "Product");
+                    }
+                    else
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -130,9 +205,6 @@ namespace Food_Web.Controllers
             }
         }
 
-
-        //
-        // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
@@ -183,51 +255,6 @@ namespace Food_Web.Controllers
         }
 
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IsApproved = false };
-                //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email};
-
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await UserManager.AddToRoleAsync(user.Id, model.Role);
-
-                    // Get the list of roles for the current user
-                    var roles = await UserManager.GetRolesAsync(user.Id);
-
-                    // Redirect to the corresponding page based on the user role
-                    if (roles.Contains("Member"))
-                    {
-
-                        // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                        // Send an email with this link
-                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                         var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                         await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                        return RedirectToAction("Index", "Product");
-                    }
-                    else if (roles.Contains("User"))
-                    {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        ViewBag.Message = "Your account has been created and is awaiting approval from the admin.";
-
-                        // Redirect to the home page
-                        return RedirectToAction("Index", "Product");
-                    }
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
         //[HttpPost]
         //[AllowAnonymous]
         //[ValidateAntiForgeryToken]
@@ -235,7 +262,7 @@ namespace Food_Web.Controllers
         //{
         //    if (ModelState.IsValid)
         //    {
-        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IsApproved = false };
+        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, IsApproved = false };
         //        //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email};
 
         //        var result = await UserManager.CreateAsync(user, model.Password);
@@ -243,21 +270,23 @@ namespace Food_Web.Controllers
         //        {
         //            await UserManager.AddToRoleAsync(user.Id, model.Role);
 
-        //            // Gửi email đăng ký thành công
-        //            SendRegistrationEmail(model.Email);
-
         //            // Get the list of roles for the current user
         //            var roles = await UserManager.GetRolesAsync(user.Id);
 
         //            // Redirect to the corresponding page based on the user role
         //            if (roles.Contains("Member"))
         //            {
-        //                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+        //                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+        //                // Send an email with this link
+        //                 //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //                 //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+        //                 //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
         //                return RedirectToAction("Index", "Product");
         //            }
         //            else if (roles.Contains("User"))
         //            {
-        //                // Display message for user account approval
+        //                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
         //                ViewBag.Message = "Your account has been created and is awaiting approval from the admin.";
 
         //                // Redirect to the home page
@@ -271,7 +300,303 @@ namespace Food_Web.Controllers
         //    return View(model);
         //}
 
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IsApproved = false, PhoneNumber = model.PhoneNumber ,Adress = model.Adress,Closetime=model.Closetime,Opentime=model.Opentime,Fullname = model.Fullname};
+        //        //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email};
 
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await UserManager.AddToRoleAsync(user.Id, model.Role);
+
+        //            //// Gửi email đăng ký thành công
+        //            //SendRegistrationEmail(model.Email);
+
+        //            // Get the list of roles for the current user
+        //            var roles = await UserManager.GetRolesAsync(user.Id);
+
+        //            // Redirect to the corresponding page based on the user role
+        //            if (roles.Contains("Member"))
+        //            {
+
+        //                return RedirectToAction("Index", "Product");
+        //            }
+        //            else if (roles.Contains("User"))
+        //            {
+        //                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //                // Display message for user account approval
+        //                ViewBag.Message = "Tài khoản Đang đợi Admin Duyệt";
+        //                return View("Message");
+
+        //                // Redirect to the home page
+        //                //return RedirectToAction("Index", "Product");
+        //            }
+        //        }
+        //        AddErrors(result);
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser
+        //        {
+        //            UserName = model.UserName,
+        //            Email = model.Email,
+        //            IsApproved = false,
+        //            PhoneNumber = model.PhoneNumber,
+        //            Adress = model.Adress,
+        //            Fullname = model.Fullname
+        //        };
+
+        //        string confirmationCode = Guid.NewGuid().ToString().Substring(0, 8);
+
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await UserManager.AddToRoleAsync(user.Id, model.Role);
+
+        //            if (model.Role == "Member")
+        //            {
+        //                //For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+        //                //Send an email with this link
+        //                //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+        //                //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        //                string subject = "Xác nhận tài khoản";
+        //                string body = "Mã xác nhận của bạn là: " + confirmationCode;
+        //                string toAddress = model.Email;
+
+        //                sendgmail(subject, body, toAddress);
+        //                return RedirectToAction("Index", "Product");
+        //            }
+        //            else if (model.Role == "User")
+        //            {
+        //                user.Closetime = model.Closetime;
+        //                user.Opentime = model.Opentime;
+        //                await UserManager.UpdateAsync(user);
+
+        //                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //                ViewBag.Message = "Tài khoản đang đợi Admin duyệt";
+        //                return View("Message");
+        //            }
+        //        }
+        //        AddErrors(result);
+        //    }
+
+        //    // If we got this far, something failed, redisplay the form
+        //    return View(model);
+        //}
+        public void sendgmail(string subject, string body, string toAddress)
+        {
+            try
+            {
+                var fromAddress = "sannguyen261102@gmail.com"; // Replace with your email address
+                var fromPassword = "xkjfdjzcsswokxle"; // Replace with your email password
+
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(fromAddress);
+                    mail.To.Add(toAddress);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+
+                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com"))
+                    {
+                        smtp.Port = 587;
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(fromAddress, fromPassword);
+                        smtp.EnableSsl = true;
+
+                        smtp.Send(mail);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception or log the error message for debugging
+            }
+        }
+        private bool CheckConfirmationCode(string confirmationCode)
+        {
+            if (Session["ConfirmationCode"] != null)
+            {
+                string storedConfirmationCode = Session["ConfirmationCode"].ToString();
+                return confirmationCode == storedConfirmationCode;
+            }
+
+            return false;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult SendConfirmationCode(string email)
+        {
+            string confirmationCode = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+            // Send the confirmation code via email
+            string subject = "Xác nhận tài khoản";
+            string body = "Mã xác nhận của bạn là: " + confirmationCode;
+
+            try
+            {
+                var fromAddress = "sannguyen261102@gmail.com"; // Replace with your email address
+                using (MailMessage mail = new MailMessage(fromAddress, email))
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com"))
+                {
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    smtp.Credentials = new NetworkCredential(fromAddress, "xkjfdjzcsswokxle"); // Replace with your email password
+
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+
+                    smtp.Send(mail);
+
+                    // Store the confirmation code in a session variable
+                    Session["ConfirmationCode"] = confirmationCode;
+
+                    return Json(new { success = true, message = "Confirmation code sent to your email." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error sending confirmation code." });
+            }
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterViewModel model, string confirmationCode)
+        {
+            if (ModelState.IsValid)
+            {
+                //// Tạo và lưu trữ mã xác nhận tạm thời
+                //SendConfirmationCode(model.Email);
+
+                // Kiểm tra mã xác nhận nhập từ biểu mẫu
+                if (!CheckConfirmationCode(confirmationCode))
+                {
+                    ModelState.AddModelError("ConfirmationCode", "Mã xác nhận không chính xác.");
+                    return View(model);
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    IsApproved = false,
+                    PhoneNumber = model.PhoneNumber,
+                    Adress = model.Adress,
+                    Fullname = model.Fullname
+                };
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, model.Role);
+
+                    if (model.Role == "Member")
+                    {
+                        return RedirectToAction("Index", "Product");
+                    }
+                    else if (model.Role == "User")
+                    {
+                        user.Closetime = model.Closetime;
+                        user.Opentime = model.Opentime;
+                        await UserManager.UpdateAsync(user);
+
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        ViewBag.Message = "Tài khoản đang đợi Admin duyệt";
+                        return View("Message");
+                    }
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay the form
+            return View(model);
+        }
+
+
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Tạo và lưu trữ mã xác nhận tạm thời
+        //        string IsEmailConfirmed = Guid.NewGuid().ToString().Substring(0, 8);
+        //        TempData["ConfirmationCode"] = IsEmailConfirmed;
+
+        //        // Gửi mã xác nhận qua email
+        //        string subject = "Xác nhận tài khoản";
+        //        string body = "Mã xác nhận của bạn là: " + IsEmailConfirmed;
+        //        string toAddress = model.Email;
+        //        sendgmail(subject, body, toAddress);
+
+        //        // Kiểm tra mã xác nhận nhập từ biểu mẫu
+        //        if (!CheckConfirmationCode(IsEmailConfirmed))
+        //        {
+        //            ModelState.AddModelError("ConfirmationCode", "Mã xác nhận không chính xác.");
+        //            return View(model);
+        //        }
+
+        //        var user = new ApplicationUser
+        //        {
+        //            UserName = model.UserName,
+        //            Email = model.Email,
+        //            IsApproved = false,
+        //            PhoneNumber = model.PhoneNumber,
+        //            Adress = model.Adress,
+        //            Fullname = model.Fullname
+        //        };
+
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await UserManager.AddToRoleAsync(user.Id, model.Role);
+
+        //            if (model.Role == "Member")
+        //            {
+        //                return RedirectToAction("Index", "Product");
+        //            }
+        //            else if (model.Role == "User")
+        //            {
+        //                user.Closetime = model.Closetime;
+        //                user.Opentime = model.Opentime;
+        //                await UserManager.UpdateAsync(user);
+
+        //                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //                ViewBag.Message = "Tài khoản đang đợi Admin duyệt";
+        //                return View("Message");
+        //            }
+        //        }
+        //        AddErrors(result);
+        //    }
+
+        //    // If we got this far, something failed, redisplay the form
+        //    return View(model);
+        //}
 
 
         //

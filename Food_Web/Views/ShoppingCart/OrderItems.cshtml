@@ -33,16 +33,16 @@
                 <td>@item.Name</td>
                 <td><img src="~/Content/products/@item.Pic" style="width:30px" /></td>
             </tr>
-           
+
 
         }
     </tbody>
 </table>
 
 @*<div class="col-12 col-sm-6">
-    <label for="ddlPaymentType">Hình thức thanh toán:</label>
-    @Html.DropDownList("ddlPaymentType", GetPaymentMethods(), "Chọn Hình Thức Thanh Toán", new { @class = "form-control" })
-</div>*@
+        <label for="ddlPaymentType">Hình thức thanh toán:</label>
+        @Html.DropDownList("ddlPaymentType", GetPaymentMethods(), "Chọn Hình Thức Thanh Toán", new { @class = "form-control" })
+    </div>*@
 <div class="col-12 col-sm-6">
     <label for="ddlPaymentType">Hình thức thanh toán:</label>
     @Html.DropDownList("ddlPaymentType", new SelectList(paymentMethods, "id", "TenHinhThuc"), "Chọn Hình Thức Thanh Toán", new { @class = "form-control" })

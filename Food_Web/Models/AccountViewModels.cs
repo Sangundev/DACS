@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Food_Web.Models
@@ -46,16 +47,32 @@ namespace Food_Web.Models
         public string Email { get; set; }
     }
 
+    //public class LoginViewModel
+    //{
+    //    [Required]
+    //    [Display(Name = "Email")]
+    //    [EmailAddress]
+    //    public string Email { get; set; }
+    //    //[Required]
+    //    //[Display(Name = "Email / UserName")]
+    //    //[EmailAddress]
+    //    //public string Email { get; set; }
+
+    //    [Required]
+    //    [DataType(DataType.Password)]
+    //    [Display(Name = "Password")]
+    //    public string Password { get; set; }
+
+
+
+    //    [Display(Name = "Remember me?")]
+    //    public bool RememberMe { get; set; }
+    //}
     public class LoginViewModel
     {
-        //[Required]
-        //[Display(Name = "Email")]
-        //[EmailAddress]
-        //public string Email { get; set; }
         [Required]
-        [Display(Name = "Email / UserName")]
-        //[EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Email/Username")]
+        public string EmailOrUsername { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -65,6 +82,7 @@ namespace Food_Web.Models
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
+
 
     public class RegisterViewModel
     {
@@ -95,6 +113,16 @@ namespace Food_Web.Models
         public string Role { get; set; }
 
         public bool IsApproved { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public TimeSpan? Opentime { get; set; }
+        public TimeSpan? Closetime { get; set; }
+        public string image { get; set; }
+        public string Adress { get; set; }
+        public string Fullname { get; set; }
+        
+        public string IsEmailConfirmed { get; set;}
     }
 
     public class ResetPasswordViewModel

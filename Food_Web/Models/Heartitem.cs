@@ -24,5 +24,7 @@ namespace Food_Web.Models
 
         [StringLength(128)]
         public string Userid { get; set; }
+
+        public virtual Product Product { get; set; }
     }
 }

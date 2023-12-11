@@ -132,6 +132,33 @@
   <data name="MENU_MENU" xml:space="preserve">
     <value>Thực Đơn</value>
   </data>
+  <data name="RS_ Deals" xml:space="preserve">
+    <value>Sản Phẩm Giảm Giá</value>
+  </data>
+  <data name="RS_ Exclusive" xml:space="preserve">
+    <value>Sản Phẩm Hot</value>
+  </data>
+  <data name="RS_ Pages" xml:space="preserve">
+    <value>Trang</value>
+  </data>
+  <data name="RS_Categories" xml:space="preserve">
+    <value>Tất Cả Thể Loại</value>
+  </data>
+  <data name="RS_HC" xml:space="preserve">
+    <value>Sản Phẩm Hiện Có</value>
+  </data>
+  <data name="RS_New" xml:space="preserve">
+    <value>Sản Phẩm Mới </value>
+  </data>
+  <data name="RS_Sale" xml:space="preserve">
+    <value>Mã Giảm Giá</value>
+  </data>
+  <data name="RS_seach" xml:space="preserve">
+    <value>Nhập Thông Tin Cần Tìm </value>
+  </data>
+  <data name="RS_Store" xml:space="preserve">
+    <value>Cửa Hàng</value>
+  </data>
   <data name="TITLE_WELCOME" xml:space="preserve">
     <value>Xin chao ban den nha hang viet nam</value>
   </data>

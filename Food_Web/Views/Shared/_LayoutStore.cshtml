@@ -1,159 +1,528 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>NHA KHOA-STH</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="~/Content/Store/css/styles.css" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-</head>
-<body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">STH</a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Tìm Kiếm..." aria-label="Tìm Kiếm..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-            </div>
-        </form>
-        <!-- Navbar-->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Thông Tin Tài Khoản</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
-                    <div class="nav">
-                        <div class="sb-sidenav-menu-heading">
-                            <a class="nav-link" href="index.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Trang Chủ
-                            </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Quan Ly
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="@Url.Action("Index", "Productss")">San Pham</a>
-                                    <a class="nav-link" href="@Url.Action("Sale", "Productss")">Giảm Giá Sản Phẩm </a>
-                                    <a class="nav-link" href="@Url.Action("Hot", "Productss")">San Pham Best</a>
-                                    <a class="nav-link" href="@Url.Action("Index", "Discounts")">Voucher</a>
-                                    <a class="nav-link" href="@Url.Action("Index", "Order_details")">Hóa đơn</a>
-                                    <a class="nav-link" href="@Url.Action("Orderday", "Order_details")">Lọc Hoá Đơn</a>
-                                    <a class="nav-link" href="@Url.Action("TopAccounts", "Order_details")">luot mua</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quan Ly Doanh Thu
-                            </a>
-                            @*<a class="nav-link" href="charts.html">
-                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
-                                    Đăng Xuất
-                                </a>*@
-                            <!-- Link đăng xuất -->
-                            <a href="#" id="logout-link">Đăng xuất</a>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-                            <!-- Form đăng xuất (ẩn ban đầu) -->
-                            <div id="logout-form" style="display: none;">
-                                <h5>Ready to leave?</h5>
-                                <p>Select "Logout" below if you are ready to end your current session.</p>
-                                <form action="/Account/LogOff" method="post">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-primary">Logout</button>
-                                    <button type="button" class="btn btn-secondary" id="cancel-logout">Cancel</button>
-                                </form>
-                            </div>
-                        </div>
+    <title>Quản lÝ</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Custom fonts for this template-->
+<link href="~/Content/Store/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="~/Content/Store/css/sb-admin-2.min.css" rel="stylesheet">
+
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+
+                <div class="sidebar-brand-text mx-3">Xin chao <sup>2</sup></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("Index", "Homes")">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Trang Chủ</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                   aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Sản Phẩm</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="@Url.Action("Index", "Productss")">Xem Sản Phẩm</a>
+                        <a class="collapse-item" href="@Url.Action("Create", "Productss")">Thêm Sản Phẩm</a>
+                        <a class="collapse-item" href="@Url.Action("Indextl", "Productss")">Export Product</a>
                     </div>
                 </div>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Đăng Nhập Vào:</div>
-                    STH
-                </div>
-            </nav>
+            </li>
+            <hr class="sidebar-divider">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategories"
+                   aria-expanded="true" aria-controls="collapseCategories">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Loại Sản Phẩm</span>
+                </a>
+                <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="@Url.Action("Index", "Categories")">Xem Loại Sản Phẩm</a>
+                        <a class="collapse-item" href="@Url.Action("Create", "Categories")">Thêm Loại Sản Phẩm</a>
 
-        </div>
-        <div id="layoutSidenav_content">
-            @RenderBody()
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; STH.2023</div>
-                        <div>
-                            <a href="#">Chính sách bảo mật</a>
-                            &middot;
-                            <a href="#">Điều khoản &amp; Điều kiện</a>
+                    </div>
+                </div>
+                <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                   aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Sản Phẩm Giảm Giá</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Utilities:</h6>
+                        <a class="collapse-item" href="@Url.Action("Sale", "Productss")">Xem Sản Phẩm Giảm Giá</a>
+                        <a class="collapse-item" href="@Url.Action("CreateDiscount", "Productss")">Thêm Sản Phẩm Giảm Giá</a>
+                        <a class="collapse-item" href="@Url.Action("giamgiah", "Productss")">giamgia theo h</a>
+                        <a class="collapse-item" href="@Url.Action("Creategiamgiah", "Productss")">them giamgia theo h</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCharts"
+                   aria-expanded="true" aria-controls="collapseCharts">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Sản Phẩm Nổi Bật</span>
+                </a>
+                <div id="collapseCharts" class="collapse" aria-labelledby="headingCharts" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                        <a class="collapse-item" href="@Url.Action("Hot", "Productss")">Xem Sản Phẩm Nổi Bật</a>
+                        <a class="collapse-item" href="@Url.Action("SetHot", "Productss")">Thêm Sản Phẩm nổi bật</a>
+
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Vocher Giảm Giá</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="@Url.Action("Index", "Discounts")">Xem Voucher Giảm Giá</a>
+                        <a class="collapse-item" href="@Url.Action("Create", "Discounts")">Thêm Voucher Giảm Giá</a>
+                        
+                    </div>
+                </div>
+            </li>
+            <hr class="sidebar-divider">
+            <!-- Nav Item - Tables -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTables"
+                   aria-expanded="true" aria-controls="collapseTables">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Hóa Đơn</span>
+                </a>
+                <div id="collapseTables" class="collapse" aria-labelledby="headingTables" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                        <a class="collapse-item" href="@Url.Action("Index", "Order_details")">Xem Hóa Đơn</a>
+                        <a class="collapse-item" href="@Url.Action("Orderday", "Order_details")"> Thao Tác Với Hóa Đơn</a>
+
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNewTables"
+                   aria-expanded="true" aria-controls="collapseNewTables">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tin nhắn 1</span>
+                </a>
+                <div id="collapseNewTables" class="collapse" aria-labelledby="headingNewTables" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="@Url.Action("Index", "Messagestore")">Seen</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount"
+                   aria-expanded="true" aria-controls="collapseAccount">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Quản lý tài khoản</span>
+                </a>
+                <form action="/Account/LogOff" method="post" id="logoutForm">
+                    @Html.AntiForgeryToken()
+                    <div id="collapseAccount" class="collapse" aria-labelledby="headingAccount" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</a>
+                                <a class="collapse-item" href="@Url.Action("Index", "Acc")">Xem tài khoản</a>
+                                <a class="collapse-item" href="@Url.Action("Index", "Acc")">Chỉnh sửa tài khoản</a>
+                                <a class="collapse-item" href="@Url.Action("ResetPassword", "Acc")">Chỉnh sửa tài khoản</a>
+                                <h6 class="collapse-header">Other Pages:</h6>
+                                <a class="collapse-item" href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
+                            </div>
                         </div>
+
+                    </div>
+                </form>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComments"
+                   aria-expanded="true" aria-controls="collapseComments">
+                    <i class="fas fa-fw fa-comment"></i>
+                    <span>Đánh Giá</span>
+                </a>
+                <div id="collapseComments" class="collapse" aria-labelledby="headingComments" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="@Url.Action("Index", "Comments")">Xem Đánh Giá về shopp</a>
+                        <a class="collapse-item" href="@Url.Action("Edit", "Comments")">Xem Đánh Giá về sản Phẩm </a>
+                    </div>
+                </div>
+            </li>
+
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            <!-- Sidebar Message -->
+            <div class="sidebar-card d-none d-lg-flex">
+                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
+                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                 aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                               placeholder="Search for..." aria-label="Search"
+                                               aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Messages -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+                                <!-- Counter - Messages -->
+                                <span class="badge badge-danger badge-counter">7</span>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                    Message Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                                             alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div class="font-weight-bold">
+                                        <div class="text-truncate">
+                                            Hi there! I am wondering if you can help me with a
+                                            problem I've been having.
+                                        </div>
+                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                             alt="...">
+                                        <div class="status-indicator"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">
+                                            I have the photos that you ordered last month, how
+                                            would you like them sent to you?
+                                        </div>
+                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                             alt="...">
+                                        <div class="status-indicator bg-warning"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">
+                                            Last month's report looks great, I am very happy with
+                                            the progress so far, keep up the good work!
+                                        </div>
+                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                             alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">
+                                            Am I a good boy? The reason I ask is because someone
+                                            told me that people say this to all dogs, even if they aren't good...
+                                        </div>
+                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <img class="img-profile rounded-circle"
+                                     src="img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+
+
+
+                <div class="container-fluid">
+
+                    <!-- Content Row -->
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Content Column -->
+                        <div class="col-lg-6 mb-4">
+
+
+
+                            @RenderBody()
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
                     </div>
                 </div>
             </footer>
+            <!-- End of Footer -->
+
         </div>
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="~/Content/Store/js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="~/Content/Store/assets/demo/chart-area-demo.js"></script>
-    <script src="~/Content/Store/assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="~/Content/Store/js/datatables-simple-demo.js"></script>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <script src="~/Content/Store/jquery.min.js"></script>
+    <script src="~/Content/Store/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/Store/js/sb-admin-2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="~/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/signalr/hubs"></script>
 
-    <script src="~/Content/Layout/assets/js/jquery-3.5.1.min.js"></script>
-    <!-- bootstrap -->
-    <script src="~/Content/Layout/assets/js/bootstrap.min.js"></script>
-    <script src="~/Content/Layout/assets/js/popper.min.js"></script>
-
-    <!-- fontawesome  -->
-    <script src="~/Content/Layout/assets/js/font-awesome.min.js"></script>
-
-    <!-- swiper slider  -->
-    <script src="~/Content/Layout/assets/js/swiper-bundle.min.js"></script>
-
-    <!-- mixitup -- filter  -->
-    <script src="~/Content/Layout/assets/js/jquery.mixitup.min.js"></script>
-
-    <!-- fancy box  -->
-    <script src="~/Content/Layout/assets/js/jquery.fancybox.min.js"></script>
-
-    <!-- parallax  -->
-    <script src="~/Content/Layout/assets/js/parallax.min.js"></script>
-
-    <!-- gsap  -->
-    <script src="~/Content/Layout/assets/js/gsap.min.js"></script>
-
-    <!-- scroll trigger  -->
-    <script src="assets/js/ScrollTrigger.min.js"></script>
-    <!-- scroll to plugin  -->
-    <script src="~/Content/Layout/assets/js/ScrollToPlugin.min.js"></script>
-    <!-- rellax  -->
-    <!-- <script src="assets/js/rellax.min.js"></script> -->
-    <!-- <script src="assets/js/rellax-custom.js"></script> -->
-    <!-- smooth scroll  -->
-    <script src="~/Content/Layout/assets/js/smooth-scroll.js"></script>
+    <script src="~/js/main.js"></script>
     @RenderSection("scripts", required: false)
 
+
+
 </body>
+
 </html>
+<style>
+    .col-lg-6 {
+        flex: 41 16 93%;
+        max-width: 102%;
+    }
+</style>
+<button class="nut-mo-chatbox" onclick="moForm()">
+    <i class="fa fa-comment"></i> Chat
+</button>
 
-<button class="nut-mo-chatbox" onclick="moForm()">Chat</button>
 <div class="Chatbox" id="myForm">
     <form action="" class="form-container">
         <h1>HỖ TRỢ</h1>
@@ -169,24 +538,8 @@
     </form>
 </div>
 
-<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
-<!-- SignalR hub script. -->
-<script src="~/signalr/hubs"></script>
-<script src="~/js/main.js"></script>
+
 <script>
-    $(document).ready(function () {
-        // Hiển thị form logout khi click vào đường link "Đăng xuất"
-        $("#logout-link").click(function (event) {
-            event.preventDefault();
-            $("#logout-form").show();
-        });
-
-        // Ẩn form logout khi click vào nút "Cancel"
-        $("#cancel-logout").click(function () {
-            $("#logout-form").hide();
-        });
-    });
-
     /*Hàm Mở Form*/
     function moForm() {
         document.getElementById("myForm").style.display = "block";
@@ -195,36 +548,48 @@
     function dongForm() {
         document.getElementById("myForm").style.display = "none";
     }
-    $(function () {
-        var chat = $.connection.chatHub;
-        // Tạo một chức năng mà trung tâm có thể gọi lại để hiển thị thông báo.
-        chat.client.addNewMessageToPage = function (name, message) {
-            // Thêm tin nhắn vào trang.
-            $('#discussion').append('<li><strong>' + htmlEncode(name)
-                + '</strong>: ' + htmlEncode(message) + '</li>');
-        };
-        // Lấy tên người dùng và lưu trữ nó để thêm vào tin nhắn.
-        // Đặt tiêu điểm ban đầu cho hộp nhập tin nhắn.
-        $('#message').focus();
-        // Bắt đầu kết nối.
-        $.connection.hub.start().done(function () {
-            $('#sendmessage').click(function () {
-                // Gọi phương thức Gửi trên trung tâm.
-                chat.server.send($('#displayname').val(), $('#message').val());
-                // Xóa hộp văn bản và đặt lại tiêu điểm cho nhận xét tiếp theo.
-                $('#message').val('').focus();
-            });
+   
+    var chat = $.connection.chatHub;
+
+    chat.client.addNewMessageToPage = function (name, message) {
+        if (message.trim() === '' || message.trim() === ':') {
+            return;
+        }
+
+        // Append the new message to the chat window
+        $('#chat-messages').append(chatMessage(name, message));
+        $('#message').val('');  // Clear the message input field
+        $('#message').focus();  // Focus on the message input field
+    };
+
+    $('#message').focus();
+
+    $.connection.hub.start().done(function () {
+        $('#sendMessageBtn').click(function () {
+            var name = $('#displayname').val();
+            var message = $('#message').val();
+
+            chat.server.send(name, message);
+
+            // Prevent the form from submitting
+            return false;
         });
     });
-    // Chức năng tùy chọn này mã hóa html thông báo để hiển thị trong trang.
-    function htmlEncode(value) {
-        var encodedValue = $('<div />').text(value).html();
-        return encodedValue;
+    // Khai báo biến chat và kết nối với ChatHub
+    
+
+    function chatMessage(currentStoreId, message) {
+        return `
+        <li class="chat-message">
+            <div class="message-content">
+                <strong>${currentStoreId}:</strong> ${message}
+            </div>
+        </li>
+    `;
     }
 </script>
 <style>
 
-    /* Nút Để Mở Chatbox */
     .nut-mo-chatbox {
         z-index: 1;
         background-color: #FF6B6B;
@@ -241,7 +606,7 @@
         font-size: 18px;
     }
 
-    /* Ẩn chatbox mặc định */
+    /* Default hidden state of the chatbox */
     .Chatbox {
         display: none;
         position: fixed;
@@ -257,14 +622,14 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Thêm style cho form */
+    /* Styling for the form */
     .form-container {
         max-width: 100%;
         padding: 10px;
         background-color: #F8F8F8;
     }
 
-        /* thiết lập style textarea */
+        /* Styling for the textarea */
         .form-container textarea {
             width: 100%;
             padding: 10px;
@@ -278,13 +643,13 @@
             font-family: 'Roboto', sans-serif;
         }
 
-            /*thiết lập style cho textarea khi được focus */
+            /* Styling for the textarea when focused */
             .form-container textarea:focus {
                 background-color: #ddd;
                 outline: none;
             }
 
-        /* Sthiết lập style cho nút trong form*/
+        /* Styling for the button in the form */
         .form-container .btn {
             background-color: #4CAF50;
             color: white;
@@ -299,173 +664,14 @@
             font-family: 'Roboto', sans-serif;
         }
 
-        /* Thiết lập màu nền cho nút đóng chatbox */
+        /* Styling the close chatbox button */
         .form-container .nut-dong-chatbox {
-            background-color: red;
+            background-color: deepskyblue;
         }
 
-        /* Thêm hiệu ứng hover cho nút*/
-        .form-container .btn:hover, .nut-mo-chatbox:hover {
+        /* Adding hover effect to the button */
+        .form-container .btn:hover,
+        .nut-mo-chatbox:hover {
             opacity: 1;
         }
 </style>
-
-
-
-<button class="nut-mo-chatbox" onclick="moForm()">Chat</button>
-<div class="Chatbox" id="myForm">
-    <form action="" class="form-container">
-        <h1>HỖ TRỢ</h1>
-        <label for="msg"><b>Lời Nhắn</b></label>
-        <textarea placeholder="Bạn hãy nhập lời nhắn.." name="msg" id="message" required></textarea>
-        <ul id="discussion">
-        </ul>
-        <div style="display:flex">
-            <input type="button" class="btn " id="sendmessage" value="Gửi" />
-            <input type="hidden" id="displayname" value="@Session["Email"]" />
-            <button type="button" class="btn nut-dong-chatbox " onclick="dongForm()">Đóng</button>
-        </div>
-    </form>
-</div>
-
-<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
-<!-- SignalR hub script. -->
-<script src="~/signalr/hubs"></script>
-<script src="~/js/main.js"></script>
-<script>
-    $(document).ready(function () {
-        // Hiển thị form logout khi click vào đường link "Đăng xuất"
-        $("#logout-link").click(function (event) {
-            event.preventDefault();
-            $("#logout-form").show();
-        });
-
-        // Ẩn form logout khi click vào nút "Cancel"
-        $("#cancel-logout").click(function () {
-            $("#logout-form").hide();
-        });
-    });
-
-    /*Hàm Mở Form*/
-    function moForm() {
-        document.getElementById("myForm").style.display = "block";
-    }
-    /*Hàm Đóng Form*/
-    function dongForm() {
-        document.getElementById("myForm").style.display = "none";
-    }
-    $(function () {
-        var chat = $.connection.chatHub;
-        // Tạo một chức năng mà trung tâm có thể gọi lại để hiển thị thông báo.
-        chat.client.addNewMessageToPage = function (name, message) {
-            // Thêm tin nhắn vào trang.
-            $('#discussion').append('<li><strong>' + htmlEncode(name)
-                + '</strong>: ' + htmlEncode(message) + '</li>');
-        };
-        // Lấy tên người dùng và lưu trữ nó để thêm vào tin nhắn.
-        // Đặt tiêu điểm ban đầu cho hộp nhập tin nhắn.
-        $('#message').focus();
-        // Bắt đầu kết nối.
-        $.connection.hub.start().done(function () {
-            $('#sendmessage').click(function () {
-                // Gọi phương thức Gửi trên trung tâm.
-                chat.server.send($('#displayname').val(), $('#message').val());
-                // Xóa hộp văn bản và đặt lại tiêu điểm cho nhận xét tiếp theo.
-                $('#message').val('').focus();
-            });
-        });
-    });
-    // Chức năng tùy chọn này mã hóa html thông báo để hiển thị trong trang.
-    function htmlEncode(value) {
-        var encodedValue = $('<div />').text(value).html();
-        return encodedValue;
-    }
-</script>
-<style>
-
-    /* Nút Để Mở Chatbox */
-    .nut-mo-chatbox {
-        z-index: 1;
-        background-color: #FF6B6B;
-        color: white;
-        padding: 16px 20px;
-        border: none;
-        cursor: pointer;
-        opacity: 0.8;
-        position: fixed;
-        bottom: 23px;
-        right: 28px;
-        width: 100px;
-        border-radius: 20px;
-        font-size: 18px;
-    }
-
-    /* Ẩn chatbox mặc định */
-    .Chatbox {
-        display: none;
-        position: fixed;
-        bottom: 0;
-        right: 15px;
-        border: 3px solid #f1f1f1;
-        z-index: 9;
-        width: 300px;
-        max-height: 400px;
-        overflow-y: scroll;
-        border-radius: 10px;
-        background-color: #FFFFFF;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Thêm style cho form */
-    .form-container {
-        max-width: 100%;
-        padding: 10px;
-        background-color: #F8F8F8;
-    }
-
-        /* thiết lập style textarea */
-        .form-container textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0 20px 0;
-            border: none;
-            background: #f1f1f1;
-            resize: none;
-            min-height: 100px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Roboto', sans-serif;
-        }
-
-            /*thiết lập style cho textarea khi được focus */
-            .form-container textarea:focus {
-                background-color: #ddd;
-                outline: none;
-            }
-
-        /* Sthiết lập style cho nút trong form*/
-        .form-container .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 16px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            opacity: 0.8;
-            border-radius: 20px;
-            font-size: 18px;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        /* Thiết lập màu nền cho nút đóng chatbox */
-        .form-container .nut-dong-chatbox {
-            background-color: red;
-        }
-
-        /* Thêm hiệu ứng hover cho nút*/
-        .form-container .btn:hover, .nut-mo-chatbox:hover {
-            opacity: 1;
-        }
-</style>
-

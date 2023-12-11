@@ -23,6 +23,13 @@ namespace Food_Web
             url: "Store/Products/{storeId}",
             defaults: new { controller = "Store", action = "Products", storeId = UrlParameter.Optional }
         );
+
+            routes.MapRoute(
+                name: "DeleteConfirmed",
+                url: "Store/Discounts/DeleteConfirmed/{id}",
+                defaults: new { controller = "Discounts", action = "DeleteConfirmed" }
+            );
+
         }
     }
 }

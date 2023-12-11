@@ -5,47 +5,74 @@
 }
 
 
-    @foreach (var product in Model)
-    {
-        <div class="col mb-5">
-            <div class="card h-100 @if (!product.status) { @Html.Raw("bg-light disabled")} @* else { @Html.Raw("bg-white")} *@">
-                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                <!-- Product image-->
-                <img class="card-img-top" src="~/Content/products/@product.image" style="width:140px" @*src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."*@ />
-                <!-- Product details-->
-                <div class="card-body p-4">
-                    <div class="text-center">
-                        <!-- Product name-->
-                        <h5 class="fw-bolder">@product.Productname</h5>
-                        <!-- Product price-->
-                        <div class="price-container">
-                            <span class="discounted-price">$@product.DiscountedPrice</span>
-                            <span class="original-price">$@product.price</span>
-                        </div>
+<div class="slider-fouc">
+    <div class="products-slider owl-carousel" data-item="4">
+        @foreach (var item in Model)
+        {
+            <div class="item">
+                <div class="image-container">
+                    <a class="item-img-wrapper-link" href="@Url.Action("Detail", "Home", new { id = item.Productid })">
+                        <img class="img-fluid" src="~/Content/products/@item.image" alt="Product">
+                    </a>
+                    <div class="item-action-behaviors">
+                        <a class="item-quick-look" data-toggle="modal" href="#quick-view">
+                            Quick Look
+                        </a>
+                        @*<a class="item-mail" href="javascript:void(0)">Mail</a>*@
+                        <a class="item-addwishlist" href="javascript:void(0)" data-id="@item.Productid">Add to Wishlist</a>
+                        <a class="item-addCart" data-id="@item.Productid">Add to Cart</a>
                     </div>
                 </div>
-                <!-- Product actions-->
-                @if (product.status)
-                {
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                            <a class="btn btn-outline-dark mt-auto" href="#">View options</a>
+                <div class="item-content">
+                    <div class="what-product-is">
+                        <ul class="bread-crumb">
+                            <li class="has-separator">
+                                <a href="shop-v1-root-category.html">home</a>
+                            </li>
+                            <li class="has-separator">
+                                <a href="shop-v2-sub-category.html">Ten shop</a>
+                            </li>
+                            <li>
+                                <a href="shop-v3-sub-sub-category.html">the loai</a>
+                            </li>
+                        </ul>
+                        <h6 class="item-title">
+                            <a href="single-product.html">@item.Productname</a>
+                        </h6>
+                        <div class="item-stars">
+                            <div class='star' title="0 out of 5 - based on 0 Reviews">
+                                <span style='width:0'></span>
+                            </div>
+                            <span>(0)</span>
                         </div>
                     </div>
-                }
-                else
-                {
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                            <a class="btn btn-outline-dark mt-auto disabled" href="#">View options</a>
-                        </div>
+                    <div class="price-template">
+                        @if (item.DiscountPercent > 0)
+                        {
+                            <div class="item-new-price">
+                                @item.DiscountedPrice
+                            </div>
+                            <div class="item-old-price">
+                                @item.price
+                            </div>
+
+                        }
+                        else if (item.DiscountPercent == null)
+                        {
+                            <div class="item-new-price">
+                                @item.price
+                            </div>
+
+                        }
                     </div>
-                }
+                </div>
+                <div class="tag new">
+                    <span>sale @item.DiscountPercent %</span>
+                </div>
             </div>
-        </div>
-
-    }
-
+        }
+    </div>
+</div>
 
 
 

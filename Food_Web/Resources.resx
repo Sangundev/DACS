@@ -135,6 +135,33 @@
   <data name="MENU_MENU" xml:space="preserve">
     <value>Menu</value>
   </data>
+  <data name="RS_ Deals" xml:space="preserve">
+    <value>Flash Deals</value>
+  </data>
+  <data name="RS_ Exclusive" xml:space="preserve">
+    <value>Exclusive Deals</value>
+  </data>
+  <data name="RS_ Pages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="RS_Categories" xml:space="preserve">
+    <value>All Categories</value>
+  </data>
+  <data name="RS_HC" xml:space="preserve">
+    <value>Products available</value>
+  </data>
+  <data name="RS_New" xml:space="preserve">
+    <value>New Arrivals</value>
+  </data>
+  <data name="RS_Sale" xml:space="preserve">
+    <value>Super Sale</value>
+  </data>
+  <data name="RS_seach" xml:space="preserve">
+    <value>Search everything</value>
+  </data>
+  <data name="RS_Store" xml:space="preserve">
+    <value>Store</value>
+  </data>
   <data name="TITLE_WELCOME" xml:space="preserve">
     <value>Welcome To Our ENGLISH Restaurant</value>
   </data>
