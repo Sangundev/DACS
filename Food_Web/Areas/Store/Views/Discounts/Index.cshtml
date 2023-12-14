@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Food_Web.Models.Discount>
-
+﻿﻿@model IPagedList<Food_Web.Models.Discount>
+@using PagedList.Mvc
+@using PagedList
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutStore.cshtml";
@@ -50,7 +51,7 @@
             <td class="border">
                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                     <span style="font-weight: bold; text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);">
-                       Trạng Thái 
+                        Trạng Thái
                     </span>
                 </div>
             </td>
@@ -126,7 +127,43 @@
             </tr>
         }
     </table>
-   
+    <div class="d-flex justify-content-center mt-3">
+        <ul class="pagination">
+            @if (Model.PageNumber > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">&laquo; Trước</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo; Trước</span>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (Model.PageNumber < Model.PageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">Tiếp &raquo;</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">Tiếp &raquo;</span>
+                </li>
+            }
+        </ul>
+    </div>
+
 </div>
 <style>
     .border {
@@ -138,7 +175,7 @@
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  var getID = null
+    var getID = null
     var getParent = null
     $(document).on('click', '.btnRemove', function () {
         getID = $(this).data('id')

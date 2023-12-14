@@ -1,4 +1,4 @@
-﻿@model Food_Web.Models.Discount
+﻿﻿@model Food_Web.Models.Discount
 
 @{
     ViewBag.Title = "Delete";
@@ -67,7 +67,7 @@
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">@Html.ActionLink("Trang Chủ", "Index", "Homes") / @Html.ActionLink("Voucher Giảm giá", "Index", "Discounts")</h6>
     </div>
- 
+
     <td class="border">
         @Html.DisplayNameFor(model => model.Code)
     </td>
@@ -81,8 +81,8 @@
     </td>
 
     <dd class="border">
-    @Html.DisplayFor(model => model.StoreId)
-    </dd >
+        @Html.DisplayFor(model => model.StoreId)
+    </dd>
 
     <td class="border">
         @Html.DisplayNameFor(model => model.DiscountPercent)

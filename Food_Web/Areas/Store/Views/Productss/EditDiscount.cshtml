@@ -1,4 +1,4 @@
-﻿@model Food_Web.Models.Product
+﻿﻿@model Food_Web.Models.Product
 
 @{
     ViewBag.Title = "EditDiscount";
@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Product</h4>
         <hr />
@@ -34,7 +34,7 @@
         </div>
 
 
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.DiscountStartTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

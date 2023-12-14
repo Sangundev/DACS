@@ -79,39 +79,39 @@ namespace Food_Web.Areas.Store.Controllers
         }
 
 
-            public JsonResult postMessage(string message)
+        public JsonResult postMessage(string message)
+        {
+            string storeId = User.Identity.GetUserId();
+            string Userid = Session["CurrentUserid"] as string;
+            if (storeId != null)
             {
-                string storeId = User.Identity.GetUserId();
-                string Userid = Session["CurrentUserid"] as string;
-                if (storeId != null)
-                {
-                    // Tạo kết nối tới SignalR Hub  
-                 var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+                // Tạo kết nối tới SignalR Hub  
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
                 //Gửi tin nhắn tới tất cả các máy khách
 
                 //hubContext.Clients.All.addNewMessageToPage(Userid, message);
                 hubContext.Clients.User(storeId).SendPrivateMessage(Userid, message);
 
                 int max = db.Messages.Max(c => c.Id);
-                    Message mess = new Message
-                    {
-                        Id = max + 1,
-                        Content = message,
-                        Userid = Userid,
-                        Storeid = storeId
-                    };
+                Message mess = new Message
+                {
+                    Id = max + 1,
+                    Content = message,
+                    Userid = Userid,
+                    Storeid = storeId
+                };
 
-                    db.Messages.Add(mess);
-                    db.SaveChanges();
+                db.Messages.Add(mess);
+                db.SaveChanges();
                 // Tạo kết nối tới SignalR Hub
                 //var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
                 //Gửi tin nhắn tới tất cả các máy khách
                 //hubContext.Clients.All.SendPrivateMessage(Userid, message);
                 hubContext.Clients.All.addNewMessageToPage(Userid, message);
                 return Json(new { success = true });
-                }
-                return Json(new { success = false, Storeid = storeId });
             }
+            return Json(new { success = false, Storeid = storeId });
+        }
 
 
 

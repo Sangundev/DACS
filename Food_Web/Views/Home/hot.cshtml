@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Food_Web.Models.Product>
+﻿﻿@model IEnumerable<Food_Web.Models.Product>
 
 @{
     ViewBag.Title = "hot";
@@ -12,7 +12,7 @@
             <div class="item">
                 <div class="image-container">
                     <a class="item-img-wrapper-link" href="@Url.Action("Detail", "Home", new { id = item.Productid })">
-                        <img class="img-fluid" src="~/Content/products/@item.image" alt="Product">
+                        <img class="img-fluid product-image" src="~/Content/products/@item.image" alt="Product">
                     </a>
                     <div class="item-action-behaviors">
                         <a class="item-quick-look" data-toggle="modal" href="#quick-view">
@@ -43,7 +43,7 @@
                             <span>(0)</span>
                         </div>
                     </div>
-                    <div class="price-template" >
+                    <div class="price-template">
                         @if (item.DiscountPercent > 0)
                         {
                             <div class="item-new-price">
@@ -127,30 +127,37 @@
                 });
             });
 
-        //$('.add-to-favorites').click(function () {
-        //    /* alert('them thanh cong');*/
-        //    var productId = $(this).closest('.dish-box-wp').find('.dish-add-btn').data('id');
-        //    $.ajax({
-        //        url: '/Heart/AddToHeart',
-        //        method: 'POST',
-        //        data: { id: productId },
-        //        success: function (response) {
-        //            // xử lý phản hồi từ máy chủ, chẳng hạn như cập nhật số lượng mục ưa thích
-        //            $('#favorite-count').text(response.favoriteCount);
-        //            swal({
-        //                title: "Good job!",
-        //                text: "You clicked the button!",
-        //                icon: "success",
-        //            });
-        //        },
-        //        error: function (jqXHR, textStatus, errorThrown) {
-        //            // xử lý lỗi, nếu có
-        //            console.log('Lỗi khi thêm vào mục ưa thích:', errorThrown);
-        //        }
-        //    });
-        //});
+            //$('.add-to-favorites').click(function () {
+            //    /* alert('them thanh cong');*/
+            //    var productId = $(this).closest('.dish-box-wp').find('.dish-add-btn').data('id');
+            //    $.ajax({
+            //        url: '/Heart/AddToHeart',
+            //        method: 'POST',
+            //        data: { id: productId },
+            //        success: function (response) {
+            //            // xử lý phản hồi từ máy chủ, chẳng hạn như cập nhật số lượng mục ưa thích
+            //            $('#favorite-count').text(response.favoriteCount);
+            //            swal({
+            //                title: "Good job!",
+            //                text: "You clicked the button!",
+            //                icon: "success",
+            //            });
+            //        },
+            //        error: function (jqXHR, textStatus, errorThrown) {
+            //            // xử lý lỗi, nếu có
+            //            console.log('Lỗi khi thêm vào mục ưa thích:', errorThrown);
+            //        }
+            //    });
+            //});
 
 
 
     </script>
 }
+<style>
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Choose "cover", "contain", "fill", or "scale-down" based on your preference */
+    }
+</style>

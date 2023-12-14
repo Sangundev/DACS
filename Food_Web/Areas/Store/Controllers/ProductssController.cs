@@ -21,41 +21,30 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DevExpress.Skins;
-
+using PagedList;
 namespace Food_Web.Areas.Store.Controllers
 {
     public class ProductssController : Controller
     {
         private FoodcontextDB db = new FoodcontextDB();
 
-       
-        public ActionResult Index()
+
+        public ActionResult Index(int? page, string searchString)
         {
             // Lấy thông tin người dùng đăng nhập
             var userId = User.Identity.GetUserId();
 
-           
-            // them 
-            var totalProducts = CalculateTotalProductsForLoggedInUser();
-            ViewBag.TotalStock = totalProducts;
+            var pageSize = 5; // Số sản phẩm hiển thị trên mỗi trang
+            var pageNumber = (page ?? 1); // Trang hiện tại
 
-            //thme
-            var TotalProductsSold = CalculateTotalnumForLoggedInStore();
-            ViewBag.TotalProductsSold = TotalProductsSold;
-
-            ////them 
-
-
-
-            var TotalMoney = CalculateTotalMoneyForLoggedInStore();
-            ViewBag.TotalMoney = TotalMoney;
-
-            // Lấy danh sách sản phẩm thuộc người dùng đăng nhập
+            // Lấy danh sách sản phẩm thuộc người dùng đăng nhập và thực hiện tìm kiếm nếu có
             var products = db.Products
-                .Where(p => p.Userid == userId)
-                .Include(p => p.Category);
-
-            return View(products.ToList());
+                .Where(p => p.Userid == userId && (string.IsNullOrEmpty(searchString) || p.Productname.Contains(searchString)))
+                .Include(p => p.Category)
+                .OrderBy(p => p.Productid) // Sắp xếp theo một trường nào đó (ví dụ: ProductId)
+                .ToPagedList(pageNumber, pageSize);
+            ViewBag.SearchString = searchString; // Truyền searchString để giữ giá trị nhập vào ô tìm kiếm
+            return View(products);
         }
         // GET: Store/Productss/Details/5
         [HttpGet]
@@ -156,15 +145,15 @@ namespace Food_Web.Areas.Store.Controllers
                             var newProduct = new Product
                             {
                                 Userid = User.Identity.GetUserId(),
-                                DateCreated= DateTime.Now,
+                                DateCreated = DateTime.Now,
                                 Productname = worksheet.Cells[row, 2].Value?.ToString(),
                                 price = Convert.ToInt32(worksheet.Cells[row, 3].Value),
                                 discription = worksheet.Cells[row, 4].Value?.ToString(),
                                 sortdiscription = worksheet.Cells[row, 6].Value?.ToString(),
                                 status = worksheet.Cells[row, 7].Value?.ToString().Equals("Active", StringComparison.OrdinalIgnoreCase) ?? false,
                                 Soluong = Convert.ToInt32(worksheet.Cells[row, 8].Value),
-                                image = worksheet.Cells[row, 9].Value?.ToString() 
-                             };
+                                image = worksheet.Cells[row, 9].Value?.ToString()
+                            };
 
                             // Get the category name from the Excel file
                             var categoryName = worksheet.Cells[row, 5].Value?.ToString();
@@ -272,7 +261,7 @@ namespace Food_Web.Areas.Store.Controllers
         }
 
 
-  
+
         [HttpPost]
         public ActionResult Create(Product newproduct, HttpPostedFileBase MainImage, List<HttpPostedFileBase> ExtraImages)
         {
@@ -289,7 +278,7 @@ namespace Food_Web.Areas.Store.Controllers
                 context.SaveChanges();
 
                 if (MainImage != null && MainImage.ContentLength > 0)
-                {   
+                {
                     var typeFile = Path.GetExtension(MainImage.FileName);
                     newproduct.image = newproduct.Productid + typeFile;
                     var filePath = Path.Combine(Server.MapPath("~/Content/products"), newproduct.image);
@@ -342,7 +331,7 @@ namespace Food_Web.Areas.Store.Controllers
                 return HttpNotFound();
             }
             ViewBag.Categoryid = new SelectList(db.Categories, "Categoryid", "Categoryname", product.Categoryid);
-           
+
             return View(product);
         }
 
@@ -454,7 +443,7 @@ namespace Food_Web.Areas.Store.Controllers
             }
 
             // Tìm extrafood dựa trên id sản phẩm và imageId
-            var extraFoodToDelete = db.extrafoods.SingleOrDefault(e => e.Productid == id && e.ext_id == imageId );
+            var extraFoodToDelete = db.extrafoods.SingleOrDefault(e => e.Productid == id && e.ext_id == imageId);
 
             if (extraFoodToDelete != null)
             {
@@ -607,18 +596,24 @@ namespace Food_Web.Areas.Store.Controllers
         }
 
 
-        public ActionResult hot()
+        public ActionResult hot(int? page)
         {
             // Lấy thông tin người dùng đăng nhập
             var userId = User.Identity.GetUserId();
 
             // Lấy danh sách sản phẩm thuộc người dùng đăng nhập và có thuộc tính is_hot bằng true
-            var products = db.Products
+            var productsQuery = db.Products
                 .Where(p => p.Userid == userId && p.is_hot == true)
-                .Include(p => p.Category)
-               ;
+                .Include(p => p.Category);
 
-            return View(products.ToList());
+            const int pageSize = 5; // Số sản phẩm hiển thị trên mỗi trang
+            var pageNumber = page ?? 1; // Trang hiện tại
+
+            // Sử dụng ToPagedList để chia dữ liệu thành các trang
+            var pagedProducts = productsQuery.OrderBy(p => p.Productid)
+                                              .ToPagedList(pageNumber, pageSize);
+
+            return View(pagedProducts);
         }
         private List<SelectListItem> GetProductList(string userId)
         {
@@ -699,14 +694,32 @@ namespace Food_Web.Areas.Store.Controllers
         }
 
 
-        public async Task<ActionResult> Sale()
+        public async Task<ActionResult> Sale(int? page, string searchString)
         {
             var userId = User.Identity.GetUserId();
 
-            var products = await db.Products.Where(p => p.DiscountPercent > 0 && p.Userid == userId).ToListAsync();
+            var productsQuery = db.Products.Where(p => p.DiscountPercent > 0 && p.Userid == userId);
 
-            return View(products);
+            // Thực hiện tìm kiếm nếu có chuỗi tìm kiếm
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                productsQuery = productsQuery.Where(p => p.Productname.Contains(searchString));
+            }
+
+            var products = await productsQuery.ToListAsync();
+
+            const int pageSize = 5; // Số sản phẩm hiển thị trên mỗi trang
+            var pageNumber = page ?? 1;
+
+            // Sử dụng ToPagedList để chia dữ liệu thành các trang
+            var pagedProducts = products.ToPagedList(pageNumber, pageSize);
+
+            // Truyền searchString để giữ giá trị nhập vào ô tìm kiếm
+            ViewBag.SearchString = searchString;
+
+            return View(pagedProducts);
         }
+
 
         public async Task<ActionResult> CreateDiscount()
         {
@@ -786,7 +799,7 @@ namespace Food_Web.Areas.Store.Controllers
                 product.Userid = userId; // Assign the logged-in user's ID to the UserId property
 
                 db.Entry(product).State = EntityState.Modified;
-               
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -909,33 +922,29 @@ namespace Food_Web.Areas.Store.Controllers
 
         //    return View(products);
         //}
-        public async Task<ActionResult> giamgiah()
+        public async Task<ActionResult> giamgiah(int? page)
         {
             var userId = User.Identity.GetUserId();
 
-            DateTime now = DateTime.Now; // Lấy thời gian thực hiện tại
+            DateTime now = DateTime.Now;
 
             var products = await db.Products
                 .Where(p => p.GiaGiamTheoKhungGio > 0 && p.Userid == userId)
                 .ToListAsync();
 
-            // Cập nhật trạng thái dựa trên thời gian thực
             foreach (var product in products)
             {
-                if (product.DiscountStartTime <= now && now <= product.DiscountEndTime)
-                {
-                    product.Tinhtranggiamgia = true;
-                }
-                else
-                {
-                    product.Tinhtranggiamgia = false;
-                }
+                product.Tinhtranggiamgia = product.DiscountStartTime <= now && now <= product.DiscountEndTime;
             }
 
-            // Lưu các thay đổi vào cơ sở dữ liệu
             await db.SaveChangesAsync();
 
-            return View(products);
+            const int pageSize = 5; // Số sản phẩm trên mỗi trang
+            int pageNumber = page ?? 1; // Trang hiện tại
+
+            var pagedProducts = products.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedProducts);
         }
 
         public async Task<ActionResult> Creategiamgiah()
@@ -1036,7 +1045,7 @@ namespace Food_Web.Areas.Store.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditDiscount(int productId,  int? phantramgiamgia, DateTime? discountStartTime, DateTime? discountEndTime)
+        public async Task<ActionResult> EditDiscount(int productId, int? phantramgiamgia, DateTime? discountStartTime, DateTime? discountEndTime)
         {
             var product = await db.Products.FindAsync(productId);
 

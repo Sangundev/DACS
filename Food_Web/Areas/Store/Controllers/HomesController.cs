@@ -36,7 +36,7 @@ namespace Food_Web.Areas.Store.Controllers
 
             var TotalMoney = CalculateTotalMoneyForLoggedInStore();
             ViewBag.TotalMoney = TotalMoney;
- 
+
 
             var products = db.Products.Where(p => p.Userid == userId);
             return View();
@@ -162,8 +162,8 @@ namespace Food_Web.Areas.Store.Controllers
             //Response.Clear();
             Response.Buffer = true;
             Response.AddHeader("content-disposition", "attachment;filename=Grid.doc");
-            Response.Charset= "";
-            Response.ContentType= "application/vnd.ms-word";
+            Response.Charset = "";
+            Response.ContentType = "application/vnd.ms-word";
             Response.Output.Write(GridHtml);
             Response.Flush();
             Response.End();

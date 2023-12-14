@@ -1,89 +1,32 @@
-﻿@model IEnumerable<Food_Web.Models.Category>
-
-@*<div class="menu-tab-wp">
-        <div class="row">
-            <div class="col-lg-12 m-auto">
-                <div class="menu-tab text-center">
-                    <ul class="filters">
-                        <div class="filter-active">
-                        </div>
-                        @foreach (var item in Model)
-                        {
-                            <li class="filter" data-filter="@item.Categoryid">
-                                <img src="" alt="">
-                                @item.Categoryname
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>*@
-
-
+﻿﻿@model IEnumerable<Food_Web.Models.Category>
 
 <div class="col-lg-3">
     <div class="v-menu">
-        <span class="v-title">
+        <span class="v-title" id="categoryDropdown">
             <i class="ion ion-md-menu"></i>
             @Resources.RS_Categories
             <i class="fas fa-angle-down"></i>
         </span>
-        <nav>
-            <div class="v-wrapper">
-                <ul class="v-list animated fadeIn">
-                    @foreach (var item in Model)
-                    {
-                        <li class="js-backdrop">
-                            <a href="@Url.Action("GetProductByCategory", "Product", new { categoryid = item.Categoryid })">
-                                <i class="ion ion-md-restaurant"></i> <!-- Biểu tượng thức ăn chung -->
-                                @item.Categoryname
-                                @*<i class="ion ion-ios-arrow-forward"></i>*@
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </nav>
+        <ul class="v-list animated fadeIn" id="categoryList" style="display: none;">
+            @foreach (var item in Model)
+            {
+                <li class="js-backdrop">
+                    <a href="@Url.Action("GetProductByCategory", "Product", new { categoryid = item.Categoryid })">
+                        <i class="ion ion-md-restaurant"></i>
+                        @item.Categoryname
+                    </a>
+                </li>
+            }
+        </ul>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-
-@*<nav>*@
-
-@*</nav>*@
-
-@*@{ Html.RenderAction("GetProductByCategory", "Product", new { categoryid = 1 }); }*@
-
-@*</div>*@
-@*<div class="menu-list-row">
-
-        @{ Html.RenderAction("GetProductByCategory", "Product", new { categoryid = 1 }); }
-
-    </div>*@
-
-@*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
 <script>
     $(document).ready(function () {
-
-        //$(".menu-tab-wp li").click(function () {
-        //    var categoryID = $(this).attr("data-filter");
-        //    $.ajax({
-        //        url: '/Product/GetProductByCategory',
-        //        type: "GET",
-        //        data: { "categoryid": categoryID },
-        //        success: function (result) {
-        //            $('.menu-list-row').html(result);
-        //        },
-        //        error: function (err) {
-        //            alert(err.statusText);
-        //        }
-        //    });
-        //});
+        $('#categoryDropdown').click(function () {
+            $('#categoryList').slideToggle();
+        });
     });
 </script>
-
-
-
-

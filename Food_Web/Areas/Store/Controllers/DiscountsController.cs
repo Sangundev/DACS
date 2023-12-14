@@ -13,6 +13,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.SignalR;
 using System.Web.Configuration;
 using DocumentFormat.OpenXml.Spreadsheet;
+using PagedList;
 
 namespace Food_Web.Areas.Store.Controllers
 {
@@ -20,34 +21,37 @@ namespace Food_Web.Areas.Store.Controllers
     {
         private FoodcontextDB db = new FoodcontextDB();
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? page)
         {
-            // Get the id of the currently logged in store
             var storeId = User.Identity.GetUserId();
-            DateTime now = DateTime.Now; // Lấy thời gian thực hiện tại
+            DateTime now = DateTime.Now;
 
-            // Get the discounts that belong to the logged-in store
             var discounts = await db.Discounts
                 .Where(p => p.StoreId == storeId)
                 .ToListAsync();
 
-            // Update the Status property based on the current date
             foreach (var discount in discounts)
             {
-                if (discount.StartDate <= now && now <= discount.EndDate || discount.SoLuong > 0)
+                if ((discount.StartDate <= now && now <= discount.EndDate) || discount.SoLuong > 0)
                 {
                     discount.Status = true;
                 }
-                else if (discount.StartDate <= now && now <= discount.EndDate || discount.SoLuong <= 0)
+                else if ((discount.StartDate <= now && now <= discount.EndDate) || discount.SoLuong <= 0)
                 {
                     discount.Status = false;
                 }
             }
 
-            // Save changes to the database
             await db.SaveChangesAsync();
 
-            return View(discounts);
+            // Set the page size for pagination
+            int pageSize = 10; // Adjust the page size according to your needs
+            int pageNumber = page ?? 1;
+
+            // Paginate the discounts
+            var pagedDiscounts = discounts.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedDiscounts);
         }
 
 

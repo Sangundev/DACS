@@ -81,7 +81,7 @@ namespace Food_Web.Areas.Store.Controllers
                         return HttpNotFound();
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Xử lý khi có lỗi xảy ra trong quá trình lưu dữ liệu
                     ModelState.AddModelError("", "An error occurred while saving the user.");
@@ -91,6 +91,6 @@ namespace Food_Web.Areas.Store.Controllers
             return View("Index", user);
         }
         // Get View using this Method
-        
+
     }
 }

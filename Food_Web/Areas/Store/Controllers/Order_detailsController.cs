@@ -20,9 +20,10 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using iTextSharp.tool.xml;
 using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
 using Microsoft.Security.Application;
 using Microsoft.Extensions.Logging;
+using PagedList;
+using PagedList.Mvc;
 
 namespace Food_Web.Areas.Store.Controllers
 {
@@ -31,20 +32,25 @@ namespace Food_Web.Areas.Store.Controllers
         private FoodcontextDB db = new FoodcontextDB();
 
         //GET: Store/Order_details
-        public async Task<ActionResult> Index()
+        public ActionResult Index(int? page)
         {
-
-
             // Get the currently logged-in user
             string userId = User.Identity.GetUserId();
+
             // Retrieve order details for the logged-in user
-            var order_detail = db.Order_detail.Include(o => o.Order).Include(o => o.Product)
-                                   .Where(o => o.Storeid == userId);
-            
-            return View(await order_detail.ToListAsync());
-            IdentityDbContext context = new IdentityDbContext();
-            var listUser = context.Users.ToList();
-            
+            var orderDetail = db.Order_detail
+                .Include(o => o.Order)
+                .Include(o => o.Product)
+                .Where(o => o.Storeid == userId)
+                .OrderBy(o => o.Od_id); // Replace YourProperty with the property you want to sort by
+
+            const int pageSize = 10; // Set your desired page size
+            int pageNumber = page ?? 1;
+
+            // Apply pagination using ToPagedList method (not asynchronous)
+            var pagedOrderDetails = orderDetail.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedOrderDetails);
         }
 
 
@@ -85,26 +91,35 @@ namespace Food_Web.Areas.Store.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-        public async Task<ActionResult> Orderday(DateTime? od_day)
+        public ActionResult Orderday(DateTime? od_day, int? page)
         {
-            var userId = User.Identity.GetUserId(); // Get the ID of the currently logged-in user
+            var userId = User.Identity.GetUserId();
             var order_details = db.Order_detail.Include(o => o.Order).Include(o => o.Product);
 
             if (od_day.HasValue)
             {
-                // Filter order details by od_day and user ID
-                order_details = order_details.Where(o => DbFunctions.TruncateTime(o.Order.Od_date) == DbFunctions.TruncateTime(od_day.Value)
-                    && o.Storeid == userId);
+                order_details = order_details
+                    .Where(o => DbFunctions.TruncateTime(o.Order.Od_date) == DbFunctions.TruncateTime(od_day.Value) && o.Storeid == userId)
+                    .OrderBy(o => o.Order.Od_date); // Add ordering by date
                 Session["selcetodday"] = od_day;
             }
             else
             {
-                // Filter order details by user ID only
-                order_details = order_details.Where(o => o.Storeid == userId);
+                order_details = order_details
+                    .Where(o => o.Storeid == userId)
+                    .OrderBy(o => o.Order.Od_date); // Add ordering by date
             }
-           
-            return View(await order_details.ToListAsync());
+
+            const int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var pagedOrderDetails = order_details
+                .ToPagedList(pageNumber, pageSize); // Use ToPagedList for pagination
+
+            return View(pagedOrderDetails);
         }
+
+
         public ActionResult Exportod_day()
         {
             var userId = User.Identity.GetUserId();
@@ -184,7 +199,7 @@ namespace Food_Web.Areas.Store.Controllers
                         quantity = od.Totalinvoucher,
                         total = od.tt_money,
                         Status = od.Order.Od_status,
-                       img = od.Product.image
+                        img = od.Product.image
                     })
                 };
 

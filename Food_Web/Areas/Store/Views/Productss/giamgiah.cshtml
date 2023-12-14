@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Food_Web.Models.Product>
+﻿﻿@model PagedList.IPagedList<Food_Web.Models.Product>
+@using PagedList.Mvc;
 
 @{
     Layout = "~/Views/Shared/_LayoutStore.cshtml";
@@ -94,7 +95,7 @@
                     @Html.DisplayFor(modelItem => item.DiscountEndTime)%
                 </td>
                 <td class="border">
-                   @if (item.Tinhtranggiamgia==true)
+                    @if (item.Tinhtranggiamgia == true)
                     {
                         <span>Còn</span>
                     }
@@ -134,6 +135,39 @@
             </tr>
         }
     </table>
+    <div class="d-flex justify-content-center mt-3">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("giamgiah", new { page = 1 })" aria-label="Trang đầu">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                    <a class="page-link" href="@Url.Action("giamgiah", new { page = Model.PageNumber - 1 })" aria-label="Trang trước">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("giamgiah", new { page = i })">@i</a>
+                    </li>
+                }
+                <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                    <a class="page-link" href="@Url.Action("giamgiah", new { page = Model.PageNumber + 1 })" aria-label="Trang sau">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item @(Model.PageNumber == Model.PageCount ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("giamgiah", new { page = Model.PageCount })" aria-label="Trang cuối">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
 </div>
 <style>
     .border {
@@ -159,7 +193,7 @@
             success: function (result) {
                 if (result.success) {
                     console.log('Product removed successfully.');
-              /*      getParent.remove();*/
+                    /*      getParent.remove();*/
                 } else {
                     console.error('Failed to remove product:', result.message);
                 }

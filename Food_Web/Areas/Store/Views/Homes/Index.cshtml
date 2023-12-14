@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutStore.cshtml";
@@ -105,18 +105,17 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        $(function () {
-            $("#btnsubmit").click(function () {
-                // Capture the HTML content of the #Grid element
-                var gridHtml = $("#Grid").html();
+<script>
+    $(function () {
+        $("#btnsubmit").click(function () {
+            // Capture the HTML content of the #Grid element
+            var gridHtml = $("#Grid").html();
 
-                // Set the content of the hidden input field
-                $("input[name='Gridhtml']").val(gridHtml);
+            // Set the content of the hidden input field
+            $("input[name='Gridhtml']").val(gridHtml);
 
-                // Submit the form to the server
-                $("#Export_form").submit();
-            });
+            // Submit the form to the server
+            $("#Export_form").submit();
+        });
     });
 </script>
-
