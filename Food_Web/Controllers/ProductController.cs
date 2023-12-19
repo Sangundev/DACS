@@ -58,7 +58,7 @@ namespace Food_Web.Models
 
         public ActionResult Sphomnay(int? page)
         {
-            const int pageSize = 10;  // Change the page size as needed
+            const int pageSize = 12;  // Change the page size as needed
             int pageNumber = page ?? 1;
 
             var context = new FoodcontextDB();
