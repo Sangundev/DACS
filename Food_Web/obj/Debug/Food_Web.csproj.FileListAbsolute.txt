@@ -851,13 +851,6 @@ D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\Aspose.Words.dll
 D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\Aspose.Words.Pdf2Word.dll
 D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\BouncyCastle.Crypto.dll
 D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\BouncyCastle.Cryptography.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.Data.v23.1.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.Drawing.v23.1.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.Printing.v23.1.Core.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.Utils.v23.1.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.Xpo.v23.1.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.XtraReports.v23.1.dll
-D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DevExpress.XtraReports.v23.1.Web.dll
 D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\DocumentFormat.OpenXml.dll
 D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\EntityFramework.dll
 D:\NsN\HihiApp\Web1\Food_Web\Food_Web\bin\EntityFramework.SqlServer.dll

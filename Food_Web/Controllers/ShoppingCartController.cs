@@ -17,7 +17,6 @@ using System.Web.Mvc;
 using System.Web.UI;
 using System.Xml.Schema;
 using System.Configuration;
-using static DevExpress.Xpo.Helpers.AssociatedCollectionCriteriaHelper;
 
 namespace Food_Web.Models
 {
@@ -996,6 +995,7 @@ namespace Food_Web.Models
 
 
             context.Orders.Add(objOrder);
+            context.SaveChanges();
             string oderid = newOrderNo.ToString();
 
             List<listOrder> listOrders = getListOrder();
@@ -1043,6 +1043,8 @@ namespace Food_Web.Models
                                 string code = " Voucher không tồn tại hoặc hết hạn";
                             }
                         }
+                        context.Order_detail.Add(ctdh);
+                        orderDetails.Add(ctdh);
 
                         // Trừ đi số lượng đã mua từ sản phẩm
                         if (product != null)
@@ -1052,7 +1054,7 @@ namespace Food_Web.Models
                         }
 
                         context.CartItems.Remove(cart);
-                        // context.SaveChanges();
+                        context.SaveChanges();
 
                         // Add to the total amount
                         tt_money += ctdh.tt_money;
