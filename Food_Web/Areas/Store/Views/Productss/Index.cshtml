@@ -63,7 +63,15 @@
                                 <td>@Html.DisplayFor(modelItem => item.price)</td>
                                 <td><img src="~/Content/products/@item.image" style="max-width: 80px;" class="img-fluid" /></td>
                                 <td>
-                                    @* Add your logic for displaying status here *@
+                                    @if (item.status && item.Soluong>0)
+                                    {
+                                        <button class="btn btn-success" data-id="@item.Productid" onclick="updateProductStatus(@item.Productid, false)">Còn</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-danger" data-id="@item.Productid" onclick="updateProductStatus(@item.Productid, true)">Hết</button>
+                                    }
+         
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
