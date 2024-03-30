@@ -1,10 +1,10 @@
-# Sàn Thương Mại Điện Tử - Ứng Dụng và Website
+# Food Selling
 
 ## Tác giả: NGỌC SANG
 
 ### Mô Tả Dự Án:
 
-Dự án này nhằm phát triển một nền tảng thương mại điện tử đa kênh, cung cấp trải nghiệm mua sắm trực tuyến thuận tiện và linh hoạt cho người dùng, cũng như cơ hội quản lý hiệu quả cho các cửa hàng.
+Dự án này nhằm phát triển một nền tảng thương mại điện tử đa kênh, cung cấp trải nghiệm mua sắm trực tuyến thuận tiện và linh hoạt cho người dùng, cũng như cơ hội quản lý hiệu quả cho các cửa hàng, admin.
 
 ### Chức Năng Chính:
 
